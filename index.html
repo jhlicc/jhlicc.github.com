@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<HEAD>
+
+<!-- 
+
+vvvv scrolling text section begins
+
+-->
+
+<style type="text/css">
+
+#marquee {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+	border: 1px solid;
+}
+
+#marquee img {
+	border: 0px;
+}
+
+#marquee dl, #marquee dt,#marquee dd,#marquee a {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+#marquee dl{
+	width: 1000%;
+}
+
+</style>
+
+<script type="text/javascript">
+
+var f_marquee = function(id){
+	var container = document.getElementById(id),
+	original = container.getElementsByTagName("dt")[0],
+	clone = container.getElementsByTagName("dd")[0],
+	speed = arguments[1] || 100;
+	clone.innerHTML=original.innerHTML;
+	var rolling = function(){
+		if (container.scrollLeft == clone.offsetLeft){
+			container.scrollLeft = 0;
+		} else {
+			container.scrollLeft++;
+		}
+	}
+	var timer = setInterval(rolling,speed)
+	container.onmouseover=function() {clearInterval(timer)}
+	container.onmouseout=function() {timer=setInterval(rolling,speed)}
+}
+
+window.onload = function(){
+	f_marquee("marquee");
+}
+</script>
+
+<!--
+
+^^^^ scrolling text section ends
+
+-->
+
+<TITLE>Jianh Homepage</TITLE>
+</HEAD>
+<BODY>
+
+<!--
+
+vvvv scrolling text section begins
+
+-->
+
+<div id="marquee">
+<dl>
+
+<dt>
+
+S&P 500
+
+ 1,317.82 
+
+-0.22% 
+
+
+
+
+
+FTSE 100
+
+ 5,351.53 
+
++0.03% 
+
+
+
+
+
+STOXX 50
+
+ 2,161.87 
+
++0.25% 
+
+
+
+
+
+DAX
+
+ 6,339.94 
+
++0.38% 
+
+
+
+
+
+Oil (WTI) 
+
+90.75 
+
++0.10% 
+
+
+
+
+
+U.S. 10-year 
+
+1.738%
+
+-0.039
+
+
+
+
+
+BAC:US
+
+ 7.15 
+
++0.14% 
+
+
+
+
+
+FB:US 
+
+31.91 
+
+-3.39% 
+
+
+
+
+
+Gold 
+
+1,574.40 
+
++0.94% 
+
+
+
+
+
+EUR-USD
+
+ 1.2512 
+
+-0.1632% 
+
+
+
+
+
+Nasdaq
+
+ 2,837.53 
+
+-0.07% 
+
+
+
+
+
+DJIA
+
+ 12,454.80 
+
+-0.60% 
+
+; &nbsp;
+
+</dt>
+
+<dd></dd>
+</dl>
+</div>
+
+<!--
+
+^^^^ scrolling text section ends
+
+-->
+
+
+<H1>Welcome!</H1>
+<P>
+
+<HR>
+
+<I>Browser Encoding: Chinese Simplified. Last modified:</I>
+<script type="text/javascript">
+document.write("<I>" + document.lastModified + "</I>")
+</script>
+
+</BODY>
+</HTML>
+
