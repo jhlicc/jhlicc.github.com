@@ -1,0 +1,50 @@
+<TITLE>
+17.4 为什么一些人写 if(0==x) 而不是 if(x==0) ？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+17.4 为什么一些人写 if(0==x) 而不是 if(x==0) ？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+它是一个用来防止这种常见错误的小把戏
+<P>
+
+<PRE>
+  if (x = 0)
+</PRE>
+<P>
+
+如果你习惯把常量写在==之前，编译器会报错，如果你偶尔这样写
+<P>
+
+<PRE>
+  if (0 = x)
+</PRE>
+<P>
+
+显然对一些人来说，记住倒转测试比记住键入两个=符号更容易。（固然偶尔写成=而不是==，是一个甚至最有经验的程序员也会犯的打字错误。）
+<P>
+
+另一方面，一些人发现这些倒转的测试很丑陋或混淆，并且争辩编译器应该对 if(x = 0) 发出警告。（实际上许多编译器确实对条件中的赋值产生警告，然而你总是可以写 if((x = expression)) 或 if((x = expression) != 0) 如果你真的是这个意思。）
+<P>
+
+参考：H&S Sec. 7.6.5 pp. 209-10
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/style/revtest.html
+</I>

@@ -1,0 +1,28 @@
+<TITLE>
+7.22 当我调用malloc为一个函数内的局部指针分配内存，我必须显式释放它吗？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+7.22 当我调用malloc为一个函数内的局部指针分配内存，我必须显式释放它吗？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+是的。记住一个指针与它所指向的东西是不同的。局部变量在函数返回时被销毁，但是在指针变量的情况，这意指指针被销毁，不是它所指向的东西。用malloc分配的内存一直持续到你显式释放它。（如果这个唯一的到一块malloc内存的指针是一个局部指针，并且如果那个指针消失了，将不会再有办法来释放那块内存。） 通常对每个malloc调用，应该有一个对应的free调用。
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/malloc/local.html
+</I>

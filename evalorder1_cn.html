@@ -1,0 +1,42 @@
+<TITLE>
+3.1 为什么这行代码 a[i] = i++; 不对？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+3.1 为什么这行代码不对？
+</H4>
+<P>
+
+<PRE>
+  a[i] = i++;
+</PRE>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+子表达式i++产生副作用——它修改i的值——这导致未定义行为，因为i在同一个表达式的其它地方也被引用。无法知道对它的引用发生在副作用之前还是之后——事实上，没有明显的解释是有效的；参见问答3.9。（注意，尽管K&R暗示这种表达式的行为是未定义的，C标准更明确声明它是未定义的——参见问答11.33。）
+<P>
+
+参考：K&R1 Sec. 2.12 
+<BR>
+K&R2 Sec. 2.12 
+<BR>
+ISO Sec. 6.3 
+<BR>
+H&S Sec. 7.12 pp. 227-9 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/expr/evalorder1.html
+</I>

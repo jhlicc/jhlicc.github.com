@@ -1,0 +1,47 @@
+<TITLE>
+12.40 文本和二进制I/O的区别是什么？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+12.40 文本和二进制I/O的区别是什么？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+在文本模式，一个文件假定包括成行的可打印的字符（或许包括tab字符）。stdio库例程（getc、putc和所以其余的）在底层系统的行末符和C程序的单个\n间转换。C程序简单地读写文本，因此不必要担心底层系统的换行符习惯：当一个C程序写一个'\n'，stdio库写适当的行末符表示，并且stdio在读取时检测到一个行末，它返回单个'\n'到调用程序。
+<P>
+
+另一方面，在二进制模式，在程序和文件中读写的字节没有任何解释。（在MS-DOS系统二进制模式也关闭对control-Z内部文件尾的测试。）
+<P>
+
+文本模式翻译也影响文件在读入时的外在尺寸。因为在文本模式读入写出文件的字符，不必精确匹配文件内存储的字符，磁盘文件的尺寸可能不总是匹配从它读取的字符数。而且，类似的原因，fseek和ftell函数不必要处理从文件头开始的纯粹字节偏移。（严格地讲，在文本模式，用于fseek和ftell的偏移值根本不应该被解释：一个ftell返回的值只应该被用作随后的fseek的参数，并且只有ftell返回的值才被用作fseek的参数。）
+<P>
+
+在二进制模式，fseek和ftell使用纯粹的字节偏移量。然而，一些系统不得不附加大量的null字节在二进制文件尾，以填充一个完整的纪录。
+<P>
+
+同时参见问答12.37和19.12。
+<P>
+
+参考：ISO Sec. 7.9.2 
+<BR>
+Rationale Sec. 4.9.2 
+<BR>
+H&S Sec. 15 p. 344, Sec. 15.2.1 p. 348 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/stdio/textvsbinary.html
+</I>

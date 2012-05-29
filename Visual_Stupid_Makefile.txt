@@ -1,0 +1,277 @@
+1. Visual Stupid Version
+
+
+$ pwd
+/home/jhl/tmp/c/myapp/src
+$ ls .. ../include/ ../src/
+..:
+include src
+
+../include/:
+bar.h foo.h
+
+../src/:
+bar.c foo.c main.c Makefile
+$
+$ cat Makefile
+ 
+# Visual Stupid Makefile 1628872598@qq.com
+# Layout: [include/]  src/
+# .c and Makefile in src, .h can be in include, no other directories.
+# Project related: CPPFLAGS
+# .cpp, CXX, CXXFLAGS for C++
+ 
+OUT      = main.out
+SRCS     = $(wildcard *.c)
+OBJS     = $(patsubst %.c,%.o,$(SRCS))
+CC       = gcc
+CXX      = g++
+CFLAGS   = -std=c99 -Wall -W
+CXXFLAGS = -std=c++0x -Wall -W
+CPPFLAGS = -I ../include
+LDFLAGS  =
+ 
+CFLAGS   += -g
+#CFLAGS  += -DNDEBUG
+CFLAGS   += -D_POSIX_SOURCE -D_BSD_SOURCE
+#LDFLAGS += -lpthread
+ 
+$(OUT): $(OBJS)
+        $(CC) $(LDFLAGS) $^ -o $@
+ 
+include $(SRCS:.c=.d)
+ 
+%.d: %.c
+        @set -e; rm -f $@; \
+        $(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+        sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+        rm -f $@.$$$$
+ 
+.PHONY: clean
+clean:
+        rm *.d *.d.* $(OBJS) $(OUT)
+ 
+$
+
+$ make
+Makefile:20: bar.d: No such file or directory
+Makefile:20: foo.d: No such file or directory
+Makefile:20: main.d: No such file or directory
+gcc -ansi -pedantic -Wall -W -I ../include -c -o bar.o bar.c
+gcc -ansi -pedantic -Wall -W -I ../include -c -o foo.o foo.c
+gcc -ansi -pedantic -Wall -W -I ../include -c -o main.o main.c
+gcc bar.o foo.o main.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch ../include/foo.h
+$ make
+gcc -ansi -pedantic -Wall -W -I ../include -c -o foo.o foo.c
+gcc -ansi -pedantic -Wall -W -I ../include -c -o main.o main.c
+gcc bar.o foo.o main.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch ../include/bar.h
+$ make
+gcc -ansi -pedantic -Wall -W -I ../include -c -o bar.o bar.c
+gcc -ansi -pedantic -Wall -W -I ../include -c -o main.o main.c
+gcc bar.o foo.o main.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch main.c
+$ make
+gcc -ansi -pedantic -Wall -W -I ../include -c -o main.o main.c
+gcc bar.o foo.o main.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch foo.c
+$ make
+gcc -ansi -pedantic -Wall -W -I ../include -c -o foo.o foo.c
+gcc bar.o foo.o main.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch bar.c
+$ make
+gcc -ansi -pedantic -Wall -W -I ../include -c -o bar.o bar.c
+gcc bar.o foo.o main.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ ./main.out
+main.c:7:main
+foo.c:6:foo
+bar.c:6:bar
+$ ls .. ../include/ ../src/
+..:
+include src
+
+../include/:
+bar.h foo.h
+
+../src/:
+bar.c bar.o foo.d main.c main.o Makefile
+bar.d foo.c foo.o main.d main.out
+$
+
+
+================================================================================
+
+
+2. More powerful version
+
+
+$ pwd
+/home/jhl/tmp/c/myapp
+$ ls . bar/ include/ src/
+.:
+bar include main.c Makefile src
+
+bar/:
+bar.c bar.h
+
+include/:
+foo.h
+
+src/:
+foo.c
+$
+$ cat Makefile
+# Visual Stupid Makefile 1628872598@qq.com
+# Layout: include/ src/ Makefile [main.c] bar/
+# .h and .c can be in include and src, or other sub-directories bar
+# main.c can be in the top level directory with Makefile or other directories
+# Project related: SRCS, CPPFLAGS, vpath
+ 
+OUT = main.out
+# .cpp for C++
+SRCS = main.c \
+  foo.c \
+  bar.c
+OBJS = $(patsubst %.c,%.o,$(SRCS))
+ 
+CC = gcc
+CXX = g++
+CFLAGS = -ansi -pedantic -Wall -W
+CXXFLAGS = -ansi -pedantic -Wall -W
+CPPFLAGS = -I include -I bar
+LDFLAGS =
+ 
+vpath %.c src bar
+ 
+$(OUT): $(OBJS)
+  $(CC) $(LDFLAGS) $^ -o $@
+ 
+include $(SRCS:.c=.d)
+ 
+# .cpp, CXX for C++
+%.d: %.c
+  @set -e; rm -f $@; \
+  $(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+  sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+  rm -f $@.$$$$
+ 
+.PHONY: clean
+clean:
+  rm *.d $(OBJS) $(OUT)
+
+$
+$ make
+Makefile:26: main.d: No such file or directory
+Makefile:26: foo.d: No such file or directory
+Makefile:26: bar.d: No such file or directory
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o main.o bar/main.c
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o foo.o src/foo.c
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o bar.o bar/bar.c
+gcc main.o foo.o bar.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch include/foo.h
+$ make
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o main.o bar/main.c
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o foo.o src/foo.c
+gcc main.o foo.o bar.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch bar/bar.h
+$ make
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o main.o bar/main.c
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o bar.o bar/bar.c
+gcc main.o foo.o bar.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch main.c
+$ make
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o main.o main.c
+gcc main.o foo.o bar.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch src/foo.c
+$ make
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o foo.o src/foo.c
+gcc main.o foo.o bar.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ touch bar/bar.c
+$ make
+gcc -ansi -pedantic -Wall -W -I include -I bar -c -o bar.o bar/bar.c
+gcc main.o foo.o bar.o -o main.out
+$ make
+make: `main.out' is up to date.
+$ ./main.out
+main.c:7:main
+src/foo.c:6:foo
+bar/bar.c:6:bar
+$ ls . bar/ include/ src/
+.:
+bar bar.o foo.o main.c main.o Makefile
+bar.d foo.d include main.d main.out src
+
+bar/:
+bar.c bar.h
+
+include/:
+foo.h
+
+src/:
+foo.c
+$
+
+
+================================================================================
+
+
+3. Old version
+
+
+# Filename : Makefile
+# Author : jhlicc@gmai1.c0m
+# Despcrition : An Implicit Rule Makefile
+# Reference : GNU `make':
+# 2.5 Letting make Deduce the Commands, 2.6 Another Style of Makefile
+ 
+# Source file organization:
+#
+# Source file organization:
+#
+#         +--------+-------+
+#   +-----+----+---+---+---+---+
+#   |     |    |  a.h  |  b.h  | ...
+#   |  main.c  +-------+-------+
+#   |          |  a.c  |  b.c  | ...
+#   +----------+-------+-------+
+
+ 
+CC = gcc
+CFLAGS = -ansi -pedantic -Wall -W
+LDFLAGS =
+OBJ = main.o a.o b.o
+OUT = main.out
+ 
+$(OUT) : $(OBJ)
+  $(CC) $(LDFLAGS) $^ -o $@
+ 
+main.o a.o : a.h
+main.o b.o : b.h
+ 
+.PHONY : clean
+clean :
+  rm $(OUT) $(OBJ)
+ 

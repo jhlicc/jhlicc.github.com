@@ -1,0 +1,242 @@
+<TITLE>自定义类型</TITLE>
+
+<CENTER><H1>自定义类型</H1></CENTER>
+<P>
+
+<H4>自定义（和抽象）类型</H4>
+<P>
+
+C有三种构造新类型的方式。最通常的一种是使用关键字struct<A HREF="#1" NAME="101"><SUP>[1]</SUP></A>。C的联合和枚举关键字也构造新类型。或许令人惊讶的是，typedef关键字不创建新类型。相反它生成一个已有类型的别名。这显示了类型系统，因为一个指向别名的指针与指向原类型名的是一样的。例如这段代码：
+<P>
+
+<PRE>
+    typedef int x;
+    int *a;
+    x *b;
+    int **p = &b;
+</PRE>
+<P>
+
+产生一个int的别名x，然后定义两个指针int*和int**（指向‘指向int的指针’的指针）。因为a和b的类型是‘指向int的指针’，p能指向它们中任何一个，p的初始化完全是正确的。
+<P>
+
+至关重要的一点是：typedef定义别名而非类型。
+<P>
+
+所有这三种类型定义关键字在一些语法上具有相似点。特别地，结构、联合和枚举使用标记。这些标记存在于标记名字空间；所有三个关键字共存于同一个标记名字空间，所以如果你这样定义struct blat;则不能再定义一个union blat;或者一个enum blat。然而标记名是可选的，很少有理由要省略它们。但是我宁愿认为，标记名是这个类型的真正的名字。本质上struct blat {int x;};确实表示‘定义一个叫做blat的新类型’（只有一个整型成员）。
+<P>
+
+我们能在任何地方，使用类型名字引用那些类型。一个将来的定义struct blat this_blat;使用我们定义的类型生成一个变量。重要的是，我们也能前向引用我们还没有定义好的类型。这允许自引用和互引用类型，包括像链表这样的简单数据结构。
+<P>
+
+类型名（像由关键字struct定义或声明，或者一个标记）在当它们被提及时就出现。这通常很方便，但是负有代价：错误拼写的类型名不会被发现，因为它们简单地生成一个新类型。一个C编译器通常不能区别，程序员是想要创建一个新类型，还是写错了名字这两种情况。因为这个原因，一些C程序员宁愿使用typedef关键字。
+<P>
+
+考虑下面这段代码：
+<P>
+
+<PRE>
+    struct temperature;
+    void apply_heat(struct temperature *);
+    void remove_heat(struct tempure *);
+</PRE>
+<P>
+
+一个空的声明struct temperature;声明存在这个对象，没有真正定义它。这创建一个不完整类型。我们然后声明两个函数，具有指向这个不完整类型的指针参数（这是可行的因为我们总是能使用一个指向不完整类型的指针，不论我们最终是否在这个翻译单元完成它）。不幸的是，我们在函数声明：remove_heat()上漏打了很多字，它真的带有一个struct tempure *类型参数。因为类型在它们的名字提及时就被生成，这真的不是一个错误。
+<P>
+
+优秀的编译器经常在这里产生一个警告，因为在此创建的类型是声明在一个内部作用域。特别地，在函数原型的括号里的任何东西具有原型作用域。一个不完整类型仅能在它被创建的作用域内被完成，仅能在相同或更深层嵌套作用域内被引用（与指针）。因为原型作用域立即结束，我们不能再引用那个特定类型，也没有方法向remove_heat()函数传递一个有效的参数<A HREF="#1" NAME="201"><SUP>[2]</SUP></A>。因此，我们有这样一个编译器，它抱怨说该类型的作用域因太有限而无用，则可能更好。
+<P>
+
+我发现typedef语法一个最大的缺点是，它与声明（‘声明的真实使用’语法已经是C最具迷惑的特征之一）混在一起。对于C的所有内置类型，我们先通过关键字指定基本类型声明变量。因为关键字集是固定的，我们能确信它为一个类型名。这个规则甚至对自定义类型也成立，只要我们从struct（union或enum）开始：我们就在其它声明之前插入了一个标记名。然而对于typedef名字，我们只得到一个普通的标识符，与其它普通标识符无异，或者除了在一些我们不能轻易察觉的包含头文件中，它被声明为一个别名之外。我们不必要知道——适当地说是在匆匆一瞥中——它真是一个typedef名字。我们已这段代码（C89相关）来作为结束讨论：
+<P>
+
+<PRE>
+    void f(x);
+</PRE>
+<P>
+
+从这段代码，你能知道x是一个typedef名或一个默认为int的变量吗？如果它是一个变量，函数定义f()具有一个int参数，但如果它是一个typedef，这个函数带有一个x类型参数。
+<P>
+
+因为这个原因，使用typedef的人们总是使用一个命名惯例（或者几个惯例）让它表明其意义。如果我们能在一瞥之间，得知某些标识符是typedef名字，语法问题就消失了。我习惯使用的三个最常见的惯例是：
+<P>
+
+<UL>
+<LI>在名字尾部附加_t，得到像uid_t，pthread_t，等等，这些标识符。（这里的_t表示typedef。注意POSIX保留使用所有这类标识符。）</LI>
+<LI>在标识符前使用一个大写字母（当然，需要保证那个大写首字母没有被于其它用途）。</LI>
+<LI>对该名字全部使用大写，像标准C的FILE类型。</LI>
+</UL>
+<P>
+
+然而我个人不喜欢typedef，并且愿意每次写上struct关键字，我们真地可以使用这种语法上的巧合并带来好处。假设我们重写早前的代码，使用一个不完全类型的typedef别名，并在函数原型中使用该别名：
+<P>
+
+<PRE>
+    typedef struct temperature TEMPERATURE;
+    void apply_heat(TEMPERATURE *);
+    void remove_heat(TEMPURE *);
+</PRE>
+<P>
+
+然而，因为struct关键字真实的类型声明仍然会产生，现在我们在第三行得到一个诊断，因为那个错误拼写的标识符不是一个typedef名字。当然每一个特定编译器的诊断的质量仍然是一个问题——我们可能得到任何这样的错误，包括从‘语法错误’到‘你拼错了TEMPERATURE吗？’——但是能保证某些东西总是好的。而且我们在此类拼写错误上得到一个诊断，而不仅仅是那些优秀编译器在原型作用域发现的错误（尽管在我的经验里，原型作用域是大量这些错误拼写发生之处，一些编译器在差不多最近十年有了更大改进）。
+<P>
+
+<H4>创建自引用和互引用类型</H4>
+<P>
+
+编写任何结构类型的‘空’声明（没有括号和内容）总是安全的，却常常是不必要的。一个类型名在它首次被提及时产生，当然除非它已经在该作用域或更外层作用域存在。因此一个空声明仅被需要，如果：
+<P>
+
+<UL>
+<LI>类型首次出现是在一个内层作用域；</LI>
+<LI>我们在某些内层作用域（比如函数或函数内的块作用域），并且想定义一个与外层作用域已有类型同名的新类型，用于互引用结构。</LI>
+</UL>
+<P>
+
+上述第二个条件几乎从不会发生，并且通常是一个糟糕的想法，因为差不多类似的原因，让一个文件作用域（全局）变量与一个块（局部）作用域变量同名，也情况不妙：它讨论起来大费周章，或者包括某些激进的不同实体全部具有相同的名字的代码。（就像是去到一个聚会，那儿每个人的名字都是Chris。然而你可能永不会忘记每个人的名字，记得是否与这个Chris，那个Chris或另一个Chris交谈，那真是痛苦的时刻。） 然而第一种情形，并非不常见。无论如何，它们总是安全的，我将在一些例子中使用它们。
+<P>
+
+典型的自引用结构是一个链表。让我们考虑一个有点复杂一些的数据结构，在其中我们将具有一系列自身有子列表的数据项，并且子列表可以指回顶层列表。例如，在一个操作系统内核，我们可能有一系列文件，其中每个文件包含一列缓存文件块。同时每个缓存文件块需要指向包含它的文件。
+<P>
+
+<PRE>
+    struct fileinfo;
+    struct cached_block;
+
+    struct fileinfo {
+      struct fileinfo *fi_next;     /* list of all files */
+      struct cached_block *fi_blks; /* cached blocks for this file */
+      /* ... */
+    };
+
+    struct cached_block {
+      int    cb_lbn;                /* logical block number */
+      struct cached_block *cb_next; /* next cached block for this file */
+      struct fileinfo *cb_file;     /* file containing this block */
+      /* ... */
+    };
+</PRE>
+<P>
+
+这里每个数据结构需要一个指向其它数据结构的指针。没有办法让我们能完全定义两个类型而不需引用另一个类型。幸运的是，C的类型名简单地在需要时产生，所以这个可行不管我们是否预定义这些类型。
+<P>
+
+然而，如果我们希望使用typedef，那会有一个问题。至少有一个typedef需要首先出现，但是因为typedef名字不会简单地‘形成’，我们不能使用两个typedef直到我们定义了它们。但是这根本不是一个严重的问题：所有我们需要做的是，定义类型名并产生别名，然后完成这两个类型：
+<P>
+
+<PRE>
+    struct fileinfo;
+    struct cached_block;
+
+    typedef struct fileinfo FILEINFO;
+    typedef struct cached_block CACHED_BLOCK;
+
+    struct fileinfo {
+      FILEINFO     *fi_next; /* list of all files */
+      CACHED_BLOCK *fi_blks; /* cached blocks for this file */
+      /* ... */
+    };
+
+    struct cached_block {
+      int          cb_lbn;   /* logical block number */
+      CACHED_BLOCK *cb_next; /* next cached block for this file */
+      FILEINFO     *cb_file; /* file containing this block */
+      /* ... */
+    };
+</PRE>
+<P>
+
+这里两个关键的地方是，记得struct关键字定义那个类型，以及我们能随时使用不完整类型名，只要我们使用指向这些不完整类型的指针。C程序员们在这样想时陷入困境——逻辑上可行，但是不正确——即是typedef关键字定义类型，并且尝试省略结构标记，得到这样的代码：
+<P>
+
+<PRE>
+    typedef struct {
+      FILEINFO     *fi_next; /* list of all files */
+      CACHED_BLOCK *fi_blks; /* cached blocks for this file */
+    } FILEINFO;
+
+    typedef struct {
+      int          cb_lbn;   /* logical block number */
+      CACHED_BLOCK *cb_next; /* next cached block for this file */
+      FILEINFO     *cb_file; /* file containing this block */
+    } CACHED_BLOCK;
+</PRE>
+<P>
+
+自然这个根本不可行。记住一个简单、总是可行的规则，即是：
+<P>
+
+<UL>
+<LI>总是使用结构标记；</LI>
+<LI>空声明写在前面；</LI>
+<LI>如果你要使用typedef，把它们也写在前面，位于空声明之后。</LI>
+</UL>
+<P>
+
+注意如果你真的使用typedef，你应避免我所描述为‘糟糕的想法’的情形——即是你总是应避免一个内层作用域类型与外层作用域类型同名——你总能省略第一个空结构声明。
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<P>
+
+<HR ALIGN=LEFT WIDTH="5%">
+<A HREF="#101" NAME="1"><sup>1.</sup></A>
+<I>我倾向于认为这个关键字是自定义抽象类型存储的缩写。当然这实际上是一种曲解。它真的只是structure的缩写，并且幸运的是——至少对于C99——它确实百分之一百地作为一种，强类型的自定义抽象类型。在C89使用结构作为自定义抽象类型，不能向函数传递一个适当类型的常量。</I>
+<BR>
+<A HREF="#201" NAME="2"><sup>2.</sup></A>
+<I>技术上，我们能使用一个void*参数调用它，但是这不是我们期望的。</I>
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.torek.net/torek/c/types2.html
+</I>

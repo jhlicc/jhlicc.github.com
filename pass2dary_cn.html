@@ -1,0 +1,82 @@
+<TITLE>
+6.8 当我传递一个二维数组到一个接受一个指针的指针的函数时，我的编译器出错了？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+6.8 当我传递一个二维数组到一个接受一个指针的指针的函数时，我的编译器出错了？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+数组蜕变为指针的规则（参见问答6.3）不能递归应用。（一旦这个规则被应用一次，该规则不能被再次应用在生成的指针上。） 一个数组的数组（即C中的二维数组）变成一个到数组的指针，不是一个到指针的指针。指向数组的指针可能产生混淆，必须被细心对待；同时参见6.13。
+<P>
+
+如果你传递一个二维数组到一个函数：
+<P>
+
+<PRE>
+  int array[NROWS][NCOLUMNS];
+  f(array);
+</PRE>
+<P>
+
+这个函数的声明必须匹配：
+<P>
+
+<PRE>
+  void f(int a[][NCOLUMNS]);
+</PRE>
+<P>
+
+或者
+<P>
+
+<PRE>
+  void f(int (*ap)[NCOLUMNS]); /* ap is a pointer to an array */
+</PRE>
+<P>
+
+在第一个声明中，编译器执行通常的“数组的数组”向“到数组的指针”的隐式参数重写（参见问答6.3）；在第二种形式中，指针声明是明显的。因为被调函数不为数组分配空间，它不需要知道全部的尺寸，所以行数NROWS可以被忽略。数组的宽度仍然重要，所以列维度NCOLUMNS（以及对于三获更多维数组，介于其间的维度。）必须被保留。
+<P>
+
+如果一个函数已经被声明为接受一个指针的指针，直接向它传递一个二维数组几乎肯定没有意义。当企图使用一个二维数组来调用它时，可能不得不使用一个中间指针：
+<P>
+
+<PRE>
+  extern g(int **ipp);
+
+  int *ip = &array[0][0];
+  g(&ip); /* PROBABLY WRONG */
+</PRE>
+<P>
+
+但是这种用法是一种误导，并且几乎肯定不正确，因为数组已被“扁平化”（它的形状丢失了）。
+<P>
+
+同时参见问答6.12和6.15。
+<P>
+
+参考：K&R1 Sec. 5.10 p. 110
+<BR>
+
+K&R2 Sec. 5.9 p. 113
+<BR>
+
+H&S Sec. 5.4.3 p. 126
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/aryptr/pass2dary.html
+</I>

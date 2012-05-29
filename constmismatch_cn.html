@@ -1,0 +1,58 @@
+<TITLE>
+11.10 为什么我不能把一个char **传递给一个需要const char **的函数？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+11.10 为什么我不能把一个char **传递给一个需要const char **的函数？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+你可以使用一个指向T（任意类型T）的指针，在一个需要指向const T的指针的地方。然而，这个（一个明显的例外）允许限定指针类型轻微不匹配的规则，不能被递归应用，而仅在第一层级。（const char ** 是一个指向指向const char的指针的指针，并且例外因此不适应。）
+<P>
+
+你不能把一个char **值赋给const char **指针的理由有些晦涩。假设存在const限定符，编译器会帮你保持不修改const值的承诺。那就是为什么你能把char *赋值给const char *，但不是相反：给一个简单的指针加上常量性显然是安全的，把它去掉会很危险。然而，假设你进行下述一系列更复杂的赋值：
+<P>
+
+<PRE>
+  const char c = 'x';     /* 1 */
+  char *p1;               /* 2 */
+  const char **p2 = &p1;  /* 3 */
+  *p2 = &c;               /* 4 */
+  *p1 = 'X';              /* 5 */
+</PRE>
+<P>
+
+在第三行，我们把一个char **赋值给一个const char **（编译器将会抱怨）。在第四行，我们把一个const char * 赋值给const char *；这显然是合法的。在第五行，我们修改一个char *指向的值——这应该是合法的。然而，p1结束时指向常量c。这在第四行发生，因为*p2事实上是p1。这在第三行一个不允许的赋值中发生，并且这确切就是为什么第三行不被允许。
+<P>
+
+把一个char **赋值给一个const char **（像在第三行中，和在最初的问题中）的危险性，不是会立即表现出来的。但是它造成了一种条件，p2的承诺——最终指向的值不会被改变——不能保证。
+<P>
+
+（C++在对const限定指针赋值上，有更复杂的规则。它让你可以进行更多种类的赋值而不招致警告，但是仍然保护以不受无意修改const值的尝试。C++仍然不允许把一个char **赋给一个const char **，但是让你把一个char **赋给一个const char * const * 。）
+<P>
+
+在C中，如果你必须在非第一级引用，赋值或传递限定符不匹配的指针，你必须使用显式类型转换（例如，在这种情形是(const char **) ），尽管总是可以，这种类型转换指示一个更深层的，这个转换没有真正修复的问题。
+<P>
+
+参考：
+ISO Sec. 6.1.2.6, Sec. 6.3.16.1, Sec. 6.5.3 
+<BR>
+H&S Sec. 7.9.1 pp. 221-2 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/ansi/constmismatch.html
+</I>

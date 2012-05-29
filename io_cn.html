@@ -1,0 +1,51 @@
+<TITLE>
+2.11 我如何向一个数据文件读或写结构？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+2.11 我如何向一个数据文件读或写结构？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+使用fwrite写入一个结构相当直接：
+<P>
+
+<PRE>
+  fwrite(&somestruct, sizeof somestruct, 1, fp);
+</PRE>
+<P>
+
+并且一个对应的fread调用可以把它读回来。在这里发生的是，fwrite接收一个指向该结构的指针，并且把该结构的内存映像写为（对应fread时为读）字节流。sizeof运算符测定这个结构占用多少字节。
+<P>
+
+（上述对fwrite的调用在ANSI编译器下是正确的，只要fwrite的原型存在作用域内，通常因为<stdio.h>已经被包含。）
+<P>
+
+然而，按照这种内存映像方式写入的数据文件不可移植，特别如果它们包含浮点字段或指针。结构的内存布局是机器和编译器相关的。不同的编译器可能使用不同的填充数量（参见问答2.12），并且基本类型的大小和字节顺序因机器而异。因此，作为内存映像写入的结构，不可能必要能被程序在其它机器上运行（或甚至由其它编译器编译）读回，并且这是一个重要的关注，如果你写入的数据文件不会用于在机器间交换。同时参见问答2.12和20.5。
+<P>
+
+再者，如果结构包含任意指针（char * 字符串或指向其它数据结构的指针），只有指针值会被写入，并且它们在读回时大多数不太可能有效。最后，注意为了广泛的可移植性，当你在打开文件是，必须使用“b”标志；参见问答12.38。
+<P>
+
+一个更加可移植的解决方案是，尽管它在一开始需要做更多的工作，编写一对按照可移植方式，一个个字段来读和写结构的函数。
+<P>
+
+参考：H&S Sec. 15.13 p. 381 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/struct/io.html
+</I>

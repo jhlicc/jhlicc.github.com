@@ -1,0 +1,60 @@
+<TITLE>
+7.5a 我有一个需要返回一个字符串的函数，但是它返回到调用处时，返回的字符串是垃圾值。
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+7.5a 我有一个需要返回一个字符串的函数，但是它返回到调用处时，返回的字符串是垃圾值。
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+不论何时当一个函数返回一个指针时，确保所指向的内存被正确分配。例如，确保你没有写出这样的东西
+<P>
+
+<PRE>
+  #include <stdio.h>
+
+  char *itoa(int n)
+  {
+    char retbuf[20];  /* WRONG */
+    sprintf(retbuf, "%d", n);
+    return retbuf;    /* WRONG */
+  }
+</PRE>
+<P>
+
+当一个函数返回时，它的自动、局部变量被抛弃，所以返回的指针在这种情形下无效（它指向一个不再存在的数组）。
+<P>
+
+一种处理是声明返回缓冲为
+<P>
+
+<PRE>
+  static char retbuf[20];
+</PRE>
+<P>
+
+这种处理方法是有缺点的，因为使用静态数据的函数不可重入。而且，后续对这个版本itoa的调用重写同一个返回缓冲：调用者不能多次调用并同时保持返回值。
+<P>
+
+同时参见问答7.5b、12.21和20.1。
+<P>
+
+参考：ISO Sec. 6.1.2.4
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/malloc/retaggr.html
+</I>

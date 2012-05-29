@@ -1,0 +1,67 @@
+<TITLE>
+13.12 我如何用一个C程序获取当前日期和时间？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+13.12 我如何用一个C程序获取当前日期和时间？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+只需要使用time、ctime、localtime和/或strftime函数。这里是一个简单的例子：
+<P>
+
+<PRE>
+#include <stdio.h>
+#include <time.h>
+
+int main()
+{
+  time_t now;
+  time(&now);
+  printf("It's %s", ctime(&now));
+  return 0;
+}
+</PRE>
+<P>
+
+对localtime和strftime的调用看起来像这样：
+<P>
+
+<PRE>
+  struct tm *tmp = localtime(&now);
+  char fmtbuf[30];
+  printf("It's %d:%02d:%02d\n", tmp->tm_hour, tmp->tm_min, tmp->tm_sec);
+  strftime(fmtbuf, sizeof fmtbuf, "%A, %B %d, %Y", tmp);
+  printf("on %s\n", fmtbuf);
+</PRE>
+<P>
+
+（注意这些函数需要一个到time_t变量的指针，即使在他们不会修改它时。）
+<P>
+
+如果你需要另一种解答，参见问答19.37。
+<P>
+
+参考：K&R2 Sec. B10 pp. 255-7 
+<BR>
+ISO Sec. 7.12 
+<BR>
+H&S Sec. 18 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/lib/curtime.html
+</I>

@@ -1,0 +1,111 @@
+/*C interview questions
+
+  Can you guess the output alone*/
+
+
+#include <stdio.h>
+
+
+
+/*1*/
+
+struct node{
+  int a;
+  int b;
+  int c;
+};
+
+int main(void)
+{
+  struct node s = {3, 5, 6};
+  struct node *pt = &s;
+
+  printf("%d\n", *(int *)pt);
+  return 0;
+}
+
+
+
+/*2*/
+
+int main(void)
+{
+  int a[5] = {1, 2, 3, 4, 5};
+  int *p = (int *)(&a + 1);
+
+  printf("%d %d\n", *(a + 1), *(p - 1));
+  return 0;
+}
+
+
+
+/*3*/
+
+void foo(int b[][3])
+{
+  ++b;
+  b[1][1] = 9;
+}
+
+int main(void)
+{
+  int a[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};
+
+  foo(a);
+  printf("%d\n", a[2][1]);
+  return 0;
+}
+
+
+
+/*4*/
+
+int main(void)
+{
+  char *p;
+  char buf[10] = {1, 2, 3, 4, 5, 6, 9, 8};
+
+  p = (char *)(int)(buf + 1)[5];
+  printf("%d\n", (int)p);
+  return 0;
+}
+
+
+
+/*5*/
+
+int counter(int i)
+{
+  static int count = 0;
+
+  count = count + i;
+  return count;
+}
+
+int main(void)
+{
+  int i, j;
+
+  for (i = 0; i <= 5; i++){
+    j = counter(i);
+  }
+  printf("%d\n", j);
+  return 0;
+}
+
+
+
+/*6*/
+
+int main(void)
+{
+  int a, b, c, d;
+
+  a = 3;
+  b = 5;
+  c = a, b;
+  d = (a, b);
+  printf("c=%d, ", c);
+  printf("d=%d\n", d);
+  return 0;
+}

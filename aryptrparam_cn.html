@@ -1,0 +1,68 @@
+<TITLE>
+6.4 如果它们如此不同，为什么数组和指针声明在作为函数形参时可互换？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+6.4 如果它们如此不同，为什么数组和指针声明在作为函数形参时可互换？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+它被看作是一种方便。
+<P>
+
+既然数组立即蜕变为指针，一个数组永不会真地被传递到一个函数。你可以佯称，一个函数接受一个数组参数，并且通过声明对应的参数为一个数组来例证：
+<P>
+
+<PRE>
+  void f(char a[])
+  { ... }
+</PRE>
+<P>
+
+从字面上解释，这个声明毫无作用，所以编译器绕过它，并假定你写的是一个指针声明，因为那是函数实际上接收的：
+<P>
+
+<PRE>
+  void f(char *a)
+  { ... }
+</PRE>
+<P>
+
+谈论一个函数，说它接收一个数组，也没有什么特别的错误，如果这个函数按照传统用于操作数组，或者参数在函数内被自然地当作数组对待。
+<P>
+
+这种像数组声明到指针的转换，只在函数形参声明中有效，没有其它地方。如果这种转换令你烦恼，你不必要强制使用它；许多程序员已经得出，它产生的混淆超过，让声明看起来像调用或在函数内的使用的那些很小的优点。（注意这种转换只发生一次；类似char a2[][]则不行。参见问答6.18和6.19。）
+<P>
+
+同时参见问答6.21。
+<P>
+
+参考：K&R1 Sec. 5.3 p. 95, Sec. A10.1 p. 205
+<BR>
+K&R2 Sec. 5.3 p. 100, Sec. A8.6.3 p. 218, Sec. A10.1 p. 226
+<BR>
+ISO Sec. 6.5.4.3, Sec. 6.7.1, Sec. 6.9.6
+<BR>
+H&S Sec. 9.3 p. 271
+<BR>
+CT&P Sec. 3.3 pp. 33-4
+<BR>
+Dennis Ritchie, ``The Development of the C Language''
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/aryptr/aryptrparam.html
+</I>

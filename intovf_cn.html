@@ -1,0 +1,47 @@
+<TITLE>
+20.6b 我如何确定整型算术不溢出？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+20.6b 我如何确定整型算术不溢出？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+通常的方法是，在运算之前把运算对象，和头文件<limits.h>中的极限值进行测试。例如，这样一个“细致的”的加法函数：
+<P>
+
+<pre>
+int
+chkadd(int a, int b)
+{
+    if(INT_MAX - b < a) {
+        fputs("int overflow\n", stderr);
+        return INT_MAX;
+    }
+    return a + b;
+}
+</pre>
+<P>
+
+同时参见问答19.39
+<P>
+
+补充链接：<a href="sd26_cn.html">更多示例代码</a>
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://c-faq.com/misc/intovf.html
+</I>

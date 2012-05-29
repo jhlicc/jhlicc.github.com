@@ -1,0 +1,34 @@
+<TITLE>
+13.25 我总是看到库函数未定义错误，但我包含了所有正确的头文件？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+13.25 我总是看到库函数未定义错误，但我包含了所有正确的头文件？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+通常调用外部库代码，使用#include包含正确的头文件只是故事的一半；你也必须告诉链接器搜索外部库本身。头文件中的声明仅告诉编译器如何调用外部函数；头文件没有提供外部函数的定义，或者告诉编译器/连接器在哪里找到那些定义。
+<P>
+
+在一些情况下（特别是如果函数是非标准的）获得这些定义，当你链接程序时，可能需要显式请求将要搜索的正确的库。（一些系统或许能在无论何时你包含一个头文件，如果是非标准的，安排它的关联库在链接时被自动请求，但是这样的工具并未广泛传播。）
+<P>
+
+同时参见问答10.11、11.30、13.26、14.3和19.40。
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/lib/extlibs.html
+</I>

@@ -1,0 +1,37 @@
+<TITLE>
+11.8 我不理解为什么我不能将const值用于初始化或数组尺寸？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+11.8 我不理解为什么我不能将const值用于初始化或数组尺寸，像在
+</H4>
+<PRE>
+  const int n = 5;
+  int a[n];
+</PRE>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+const限定符真正表示的是“只读”；一个这样限定的对象是一个不能被赋值的运行时对象。一个const限定对象的值从这个术语解释，因此不是一个常量表达式，并且不能被用于说明数组尺寸、case标签、等等（C在这方面不像C++）。当你需要一个真的编译时常量时，使用一个预处理宏定义（或者一个枚举）。
+<P>
+
+参考：ISO Sec. 6.4
+<BR>
+H&S Secs. 7.11.2,7.11.3 pp. 226-7
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/ansi/constasconst.html
+</I>

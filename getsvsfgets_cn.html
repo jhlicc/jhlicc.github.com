@@ -1,0 +1,42 @@
+<TITLE>
+12.23 为什么人人都说不要使用gets()？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+12.23 为什么人人都说不要使用gets()？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+不像fgets()，gets()不能被告知它将读入的缓冲区的大小，所以如果一个输入行长度超过所期望尺寸，它不能阻止缓冲区溢出——墨非法则说，迟早，一个大于预期的输入行将出现。[1] （这将能令你确信，因为某些理由，超过某些最大值长度的输入行是可能的，但是也可能出现错误，不论如何只使用fgets更简单。）
+<P>
+
+标准fgets函数是在gets之上的一个巨大改进，尽管它也不完美。（如果长的输入行真的可能，必须仔细考虑它们的正确处理。）
+<P>
+
+fgets()和gets()之间的另一个不同是，fgets读入'\n'，但是它将直接抛弃它。参见问答7.1的fgets()代替gets()的代码片断。
+<P>
+
+[1] <I>当讨论gets()的缺陷时，通常会指出1988年“互联网蠕虫”，它在Unix的finger后台程序中使用一个gets()调用，作为它的攻击方式之一。它使用一个仔细人为的二进制数据，溢出了gets的缓冲区。它覆盖栈上一个返回地址，以致控制流转向二进制数据。</I>
+<P>
+
+参考：Rationale Sec. 4.9.7.2 
+<BR>
+H&S Sec. 15.7 p. 356 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/stdio/getsvsfgets.html
+</I>

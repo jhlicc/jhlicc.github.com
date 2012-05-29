@@ -1,0 +1,84 @@
+<TITLE>
+5.2 我怎样在我的程序中得到一个null指针？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+5.2 我怎样在我的程序中得到一个null指针？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+用一个null指针常量。
+<P>
+
+根据语言定义，一个“值为0的整型常量表达式”在指针上下文中，在编译时被转换为一个null指针。也即是，当一边是指针类型变量或表达式时，在初始化、赋值或比较中，编译器能得知另一边的常量0要求是一个null指针，并且生成正确类型的null指针值。因此，下列代码片断完全合法：
+<P>
+
+<PRE>
+  char *p = 0;
+  if(p != 0)
+    ;
+</PRE>
+<P>
+
+（参见问答5.3）
+<P>
+
+然而，一个传递给函数的参数不必要是一个指针上下文，并且编译器不知道一个未修饰的0“表示”一个null指针。为了在一个函数调用上下文中生成一个null指针，需要一个显式类型转换，强制把0识别为一个指针。例如，Unix系统调用execl有一个变长、null指针终结的字符指针参数列表，它被这样调用：
+<P>
+
+<PRE>
+  execl("/bin/sh", "sh", "-c", "date", (char *)0);
+</PRE>
+<P>
+
+如果在最后一个参数的类型转换（char *）被忽略，编译器不会传递一个null指针，而是传递一个整数0。（注意许多Unix手册在这个例子上都出错了；同时参见问答5.11。）
+<P>
+
+当函数原型起作用时，参数传递变成一个“赋值上下文”，并且大部分类型转换可以被安全地忽略，因为原型告诉编译器需要一个那种类型指针，使它能正确转换一个未修饰的0。然而函数原型不能为变长参数列表中的参数提供类型转换，所以对这些参数，仍然需要显式类型转换。（同时参见问答15.3）。正确转换函数调用中的所有null指针，可能是最安全的，以提防变参或者没有原型的函数。
+<P>
+
+这里有一个何时null指针常量被用于自身，以及何时需要显式转换的规则概要：
+<P>
+
+<PRE>
+  +-----------------------+---------------------------+
+  |   Unadorned 0 okay    |  Explicit cast required   |
+  +-----------------------+---------------------------+
+  |  initialization       |  function call,           |
+  |                       |  no prototype in scope    |
+  |  assignment           |                           |
+  |                       |  variable argument in     |
+  |  comparison           |  varargs function call    |
+  |                       |                           |
+  |  function call,       |                           |
+  |  prototype in scope,  |                           |
+  |  fixed argument       |                           |
+  +-----------------------+---------------------------+
+</PRE>
+<P>
+
+参考：K&R1 Sec. A7.7 p. 190, Sec. A7.14 p. 192
+<BR>
+K&R2 Sec. A7.10 p. 207, Sec. A7.17 p. 209
+<BR>
+ISO Sec. 6.2.2.3
+<BR>
+H&S Sec. 4.6.3 p. 95, Sec. 6.2.7 p. 171
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/null/null2.html
+</I>

@@ -1,0 +1,71 @@
+<pre>
+
+Configure Gitweb with Apache on Debian 5
+********************************************************************************
+
+
+$ su -c 'aptitude install git-core gitweb'
+
+# vvvv uncomment the line in /etc/gitweb.conf containing: $home_link
+$ cat /etc/gitweb.conf
+
+# path to git projects (<project>.git)
+$projectroot = "/var/cache/git";
+
+# directory to use for temp files
+$git_temp = "/tmp";
+
+# target of the home link on top of all pages
+$home_link = $my_uri || "/";
+
+# html text to include at home page
+$home_text = "indextext.html";
+
+# file with project list; by default, simply scan the projectroot dir.
+$projects_list = $projectroot;
+
+# stylesheet to use
+$stylesheet = "/gitweb.css";
+
+# logo to use
+$logo = "/git-logo.png";
+
+# the 'favicon'
+$favicon = "/git-favicon.png";
+
+$
+# ^^^^ end of /etc/gitweb.conf
+
+# /var/cache/git, may be created automatically
+
+$ su -c 'mkdir /var/www/gitweb'
+
+$ cd /var/www/gitweb/
+
+$ su -c 'ln -s /usr/lib/cgi-bin/gitweb.cgi .'
+
+$ cat /etc/apache2/conf.d/gitweb
+
+&lt;Directory /var/www/gitweb&gt;
+Allow from all
+AllowOverride all
+Order allow,deny
+Options ExecCGI
+&lt;Files gitweb.cgi&gt;
+SetHandler cgi-script
+&lt;/Files&gt;
+&lt;/Directory&gt;
+DirectoryIndex gitweb.cgi
+SetEnv GITWEB_CONFIG /etc/gitweb.conf
+
+Alias /gitweb.css /usr/share/gitweb/gitweb.css
+Alias /git-favicon.png /usr/share/gitweb/git-favicon.png
+Alias /git-logo.png /usr/share/gitweb/git-logo.png
+
+$ su -c '/etc/init.d/apache2 reload'
+
+# Browse gitweb: http://192.168.229.131/gitweb/
+
+# 403 Forbidden - No projects found - Now it's time to add code to Git repository.
+
+</pre>

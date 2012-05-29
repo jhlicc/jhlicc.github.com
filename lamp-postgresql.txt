@@ -1,0 +1,38 @@
+Debian6 PostgreSQL8 phpPgAdmin4
+
+
+$ su -c 'aptitude install apache2 php5 libapache2-mod-php5'
+
+$ su -c 'aptitude install postgresql phppgadmin'
+
+$ su -c 'vi /etc/phppgadmin/apache.conf' 
+# in the file enable the line containing: allow from all
+
+$ su -c '/etc/init.d/apache2 reload'
+
+## browser: http://192.168.229.133/phppgadmin/
+
+$ su root
+Password:
+root@CSYS2:/home/user1# su postgres
+postgres@CSYS2:/home/user1$ psql
+psql (8.4.7)
+Type "help" for help.
+
+postgres=# create user user1;
+CREATE ROLE
+postgres=# alter user user1 password 'user1';
+ALTER ROLE
+postgres=# alter user user1 with createdb;
+ALTER ROLE
+postgres=# select rolname from pg_roles;
+ rolname
+----------
+ postgres
+ user1
+(2 rows)
+
+postgres=# \q
+$
+
+## login with new user "user1": http://192.168.229.133/phppgadmin/

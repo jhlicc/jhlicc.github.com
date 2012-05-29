@@ -1,0 +1,87 @@
+<TITLE>
+5.3 简化的指针比较 if(p) 是否正确？如果null指针的内部表示为非零会怎么样？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+5.3 简化的指针比较 if(p) 是否正确？如果null指针的内部表示为非零会怎么样？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+它总是正确的。
+<P>
+
+当C要求一个表达式的布尔值时，表达式等于0时会推断出一个false值，等于其它值会推断出一个true值。即是，不论何时一个人写
+<P>
+
+<PRE>
+  if(expr)
+</PRE>
+<P>
+
+此处“expr”是任意表达式，编译器本质上表现得如同那行代码是这样写
+<P>
+
+<PRE>
+  if((expr) != 0)
+</PRE>
+<P>
+
+用通常的指针表达式“p”代替“expr”，我们得到
+<P>
+
+<PRE>
+  if(p) 等同 if(p != 0)
+</PRE>
+<P>
+
+这是一个比较上下文，所以编译器知道（隐含的）0实际上是一个null指针常量，并使用正确的null指针值。这里不存在什么窍门；编译器就是这样工作的，并为两种代码生成相同的代码。一个null指针的内部表示并不重要。
+<P>
+
+布尔非运算符 ! 可以被如下描述：
+<P>
+
+<PRE>
+  !expr 等同 (expr)?0:1
+      或 ((expr) == 0)
+</PRE>
+<P>
+
+这得出结论
+<P>
+
+<PRE>
+  if(!p) 等同 if(p == 0)
+</PRE>
+<P>
+
+类似 if(p) 这样的“简化”，尽管完全合法，却被一些人认为是不好的风格（其他人认为是良好的风格；参见问答17.10）。
+<P>
+
+同时参见问答9.2。
+<P>
+
+参考：K&R2 Sec. A7.4.7 p. 204 
+<BR>
+
+ISO Sec. 6.3.3.3, Sec. 6.3.9, Sec. 6.3.13, Sec. 6.3.14, Sec. 6.3.15, Sec. 6.6.4.1, Sec. 6.6.5 
+<BR>
+
+H&S Sec. 5.3.2 p. 122 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/null/ptrtest.html
+</I>

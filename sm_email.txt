@@ -1,0 +1,90 @@
+[Synthesis and not-inherit C++ facilities]
+
+
+
+
+   from  Scott Meyers <smey...@aristeia.com>    hide details  1/29/06  
+     to  lovecreatesbeauty <lovecreatesbea...@gmail.com>   
+   date  Jan 29, 2006 12:56 PM   
+subject  Re: Which members are created automatically, which members are not
+         inherited in a C++ class?   
+
+At 1/26/2006 05:32 PM, you wrote:
+>1. Which (How many) members will be created automatically?
+>
+>Scott Meyers seems to give this list in a early print of his
+><<effective C++, 2nd>>, but he removed 1 (or 2, perhaps you know it),
+>the list containing 6 members he gives is:
+>
+>   default constructor, copy constructor, destructor, assignment
+>operator, a pair of address-of operators (i.e. const, non-const) .
+>
+>But in a later print (not a new edition, I don't read the 3rd one) he
+>removed the last pair of operators from that list without a detail
+>description, or he put that pair in that list before without a
+>thoroughly convinced reason.  That is my complaint.
+
+ From the errata list (http://www.aristeia.com/BookErrata/
+ ec++2e-errata_frames.html):
+
+!  2/10/00 ic    212  A class declaring no operator& function(s)            
+9/10/01
+          cxh   213  does NOT have them implicitly declared.  Rather,
+                245  compilers use the built-in address-of operator
+                246  whenever "&" is applied to an object of that
+                     type.  This behavior, in turn, is technically
+                     not an application of a global operator&
+                     function.  Rather, it is a use of a built-in
+                     operator.
+                       I eliminated mention of operator& as an
+                     automatically generated function and adjusted the
+                     index to eliminate entries for the removed
+                     material.
+
+>Dr. Bjarne Stroustrup mentioned operator , (i.e. comma) is also a
+>predefined member (he mentioned total 3: =, &, and , in TC++PL sec
+>11.2.2), but Andrew Koenig said "That is not a member function." in my
+>post before.
+
+I agree with Andrew Koenig, but this does not contradict Bjarne in 11.2.2.  
+Bjarne says that those operators have predefined meanings when applied to class 
+types, not that they are automatically generated member functions.
+
+The C++ Standard lists only four "special member functions," and 12.1 lists them
+ explicitly:
+
+  "The default constructor (12.1), copy constructor and copy assignment 
+   operator (12.8), and destructor (12.4) are special member functions. The 
+   implementation will implicitly declare these member functions for a class 
+   type when the program does not explicitly declare them, except as noted in 
+   12.1."
+
+>How about new and delete, and some others functions or operators which
+>I do not know the name. Who will give a complete list?
+
+As noted above, the Standard does, and it is consistent with what I say in 2E 
+after removal of the operator& functions.  Operators new and delete are not 
+implicit member functions.
+
+>2. Which (How many) members can not be inherited?
+>
+>I know default ctor, copy ctor, dctor, assignment operator can not be
+>inherited. The first three members share the same name respectively
+>even the base class name and the derived class name are different - it
+>is obvious, but it helps me to understand the reason of non-inherited.
+
+Another way of looking at it is that the implicitly generated member functions 
+hide them.
+
+>Sincerely,
+>
+>lovecreatesbeauty,
+
+You might want to create a real name, as my spam filters nearly got rid of your 
+email as porn :-)
+
+I hope the above helps.  If you require further clarification, I encourage you 
+to post your questions to the newsgroup comp.lang.c++.moderated.
+
+
+Scott 

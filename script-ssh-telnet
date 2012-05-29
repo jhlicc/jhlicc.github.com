@@ -1,0 +1,93 @@
+################################################################################
+# Filename      : rcmd.pl
+# Description   : Scripting SSH/Telnet
+# Synopsis      : rcmd.pl  <prot> <cmd> <host> <user> <pwd> <altpw>
+# Author        : lovecreatesbeauty@gmai1.c0m
+# Date          : May 30, 2008
+################################################################################
+
+#!/usr/bin/perl
+
+#use warnings;
+use strict;
+use Net::Telnet();
+use Net::SSH::Perl();
+sub rcmd_usage;
+sub rcmd;
+
+exit rcmd(@ARGV);
+
+################################################################################
+# Function      : rcmd  <prot> <cmd> <host> <user> <pwd> <altpw>
+# Description   : Execute command on remote host. root privilege may be required
+#                 on some commands. This script is intended to automatically
+#                 telnet to remote host or ssh to remote host in which neither
+#                 /etc/hosts.equiv nor ~/.rhosts files may be available.
+# Arguments     : prot  - telnet or ssh protocol to connect to host,
+#                 cmd   - command is to run on host,
+#                 host  - ip or name of host,
+#                 user  - user account to log on host,
+#                 pwd   - user's password,
+#                 altpw - an alternative roots password on host if in need.
+# Return        : return 0 on success, otherwise non-zero.
+################################################################################
+
+sub rcmd
+{
+        my ($prot, $cmd, $host, $user, $pwd, $altpw) = @_;
+        my ($narg, $npwd, $naltpw) = (scalar(@ARGV), length($pwd),
+                length($altpw));
+        my ($lg_prom, $pw_prom, $tmout) = ('/login[: ]*$/i',
+                '/password[: ]*$/i', 100);
+        my ($cnn, @aout);
+
+        if ($narg < 4 || $narg > 6){
+                rcmd_usage;
+                return 1;
+        }
+
+        # telnet with non-root, roots password required to execute other command
+        # on remote host; or login directly with root on ssh connection.
+        if ($prot =~ /[Tt][Ee][Ll][Nn][Ee][Tt]/){
+                $cnn = new Net::Telnet(Timeout => $tmout);
+                $cnn->timeout($tmout);
+                $cnn->open($host);
+                $cnn->waitfor($lg_prom);
+                $cnn->print($user);
+
+                # The null string "" provided as password argument indicates no
+                # password is required from the user to login. don't check the
+                # password then.
+                if ($npwd != 0){
+                         $cnn->waitfor($pw_prom);
+                         $cnn->print($pwd);
+                }
+                $cnn->waitfor($cnn->prompt);
+                if ($naltpw != 0){
+                         $cnn->print("su -");
+                         $cnn->waitfor($pw_prom);
+                         $cnn->print($altpw);
+                         $cnn->waitfor($cnn->prompt);
+                }
+        } elsif ($prot =~ /[Ss][Ss][Hh]/){
+                $cnn = Net::SSH::Perl->new($host);
+                $cnn->login($user, $pwd);
+        } else {
+                rcmd_usage;
+                return 1;
+        }
+        @aout = $cnn->cmd($cmd);
+        print "@aout";
+        return 0;
+}
+
+################################################################################
+# Function      : rcmd_usage
+# Description   : print the usage of rcmd function
+################################################################################
+
+sub rcmd_usage
+{
+        my $s = "Usage: rcmd.pl  <prot> <cmd> <host> <user> <pwd> <altpw>";
+        print "$s\n";
+}

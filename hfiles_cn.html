@@ -1,0 +1,59 @@
+<TITLE>
+10.6 在.c文件和.h文件中分别可以有些什么？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+10.6 我正第一次把我的程序分成多个文件，我想知道在.c文件和.h文件中分别可以有些什么？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+作为一个通用的规则，你应当把这些放在头（.h）文件中：
+<P>
+
+<PRE>
+  宏定义 macro definitions (预处理#define)
+  结构、联合和枚举声明 structure, union, and enumeration declarations
+  类型声明 typedef declarations
+  外部函数声明 external function declarations (参见问答1.11)
+  全局变量声明 global variable declarations
+</PRE>
+<P>
+
+当被其它文件共享时，把一个声明或定义放在一个头文件中尤其重要。不要重复一个声明或宏定义，在两个或更多文件的顶层（作用域）；一定把它放在一个头文件中，并且包含它无论在哪里需要它。这个理由不是为了要少打字：你想设置好这些，这样无论何时一个声明或定义发生改变，你只需要在一个地方改变它，这个更新会一致的传递到所有源文件。（特别地，决不要把外部函数原型放在.c文件中。参见问答1.7）
+<P>
+
+另一方面，当一个定义或声明需要对一个.c文件保持私有，把它放在那里是可以的。（私有化文件作用域函数和变量也应该被声明为static。参见问答2.4）
+<P>
+
+最后，你不应当把真正的代码（例如函数体）或全局变量定义（即是定义或实例初始化）放在头文件中。当建立一个多文件的项目时，你也需要编译分别编译它们每一个（仅使用一个编译器选项去要求编译器），并且使用链接器把结果对象文件链接起来。（在一个集成开发环境，所有这些可能已为你做好。） 不要用#include把所有你的源文件包含起来；#include指令应该被用于包含头文件，并非其它的.c文件。
+<P>
+
+同时参见问答1.7、10.7和17.2。
+<P>
+
+附加链接：<a href="http://www.c-faq.com/cpp/sd7.html" rel=subdocument>更多解释</a>。
+<P>
+
+参考：K&R2 Sec. 4.5 pp. 81-2 
+<BR>
+H&S Sec. 9.2.3 p. 267 
+<BR>
+CT&P Sec. 4.6 pp. 66-7 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/cpp/hfiles.html
+</I>

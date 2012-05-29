@@ -1,0 +1,35 @@
+<TITLE>
+6.7 数组怎么是左值，如果你不能对它赋值？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+6.7 数组怎么是左值，如果你不能对它赋值？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=BLUE><B>A:</B></FONT>
+左值（lvalue）这个术语，不完全意味“你可以对它赋值的东西”；一个更好的定义是“有一个地址（位于内存中）的东西”。ANSI/ISO C标准，接着定义了一个“可修改的左值”；一个数组不是一个可修改的左值。参见问答6.5。
+<P>
+
+参考：ISO Sec. 6.2.2.1
+<BR>
+Rationale Sec. 3.2.2.1
+<BR>
+H&S Sec. 7.1 p. 179
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/aryptr/arraylval.html
+</I>

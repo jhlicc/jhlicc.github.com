@@ -1,0 +1,101 @@
+<TITLE>
+  comp.lang.c 常见问答（部分）
+</TITLE>
+
+<H1>
+  comp.lang.c 常见问答（部分）
+</H1>
+
+<HR>
+<P>
+
+<UL>
+  <LI><A href="initval_cn.html">1.30 我能假定未显式初始化的变量和数组有什么初始值？</A></LI>
+  <LI><A href="fcninit_cn.html">1.31b 这样初始化 char *p = malloc(10); 有什么错？</A></LI>
+  <LI><A href="strlitinit_cn.html">1.32 这些初始化 char a[] = "string literal"; char *p  = "string literal"; 的区别是什么？</A></LI>
+  <P>
+
+  <LI><A href="io_cn.html">2.11 我如何向一个数据文件读或写结构？</A></LI>
+  <LI><A href="padding_cn.html">2.12 为何编译器在结构型变量中留下空洞，浪费空间并妨碍二进制读写外部数据文件？我能把它关闭或者控制结构成员对齐吗？</A></LI>
+  <P>
+
+  <LI><A href="evalorder1_cn.html">3.1 为什么这行代码 a[i] = i++; 不对？</A></LI>
+  <LI><A href="ieqiplusplus_cn.html">3.3 我看到这样的代码 int i = 3; i = i++; 在有些编译器上i是3，有些是4。</A></LI>
+  <LI><A href="precvsooe_cn.html">3.4 我能使用明确的括号强制我想要的求值顺序，并控制副作用吗？假使我不能，是优先级决定了它吗？</A></LI>
+  <LI><A href="seqpoints_cn.html">3.8 如何理解复杂表达式并避免未定义行为？什么是顺序点？</A></LI>
+  <LI><A href="confused_cn.html">3.11 我如何避免这些未定义求值顺序困难，如果我看起来没有明白那些复杂的规则？</A></LI>
+  <LI><A href="intoverflow1_cn.html">3.14 为什么这个代码 int a = 1000, b = 1000; long int c = a * b; 不对？</A></LI>
+  <P>
+
+  <LI><A href="int2ptr_cn.html">4.14 整数和指针间如何转换？我们可以临时把一个整数塞进一个指针，或相反吗？</A></LI>
+  <P>
+
+  <LI><A href="null2_cn.html">5.2 我怎样在我的程序中得到一个null指针？</A></LI>
+  <LI><A href="ptrtest_cn.html">5.3 简化的指针比较 if(p) 是否正确？如果null指针的内部表示为非零会怎么样？</A></LI>
+  <LI><A href="macsochange_cn.html">5.10 万一NULL的值改变，使用它不是更好吗（而不是0），或者在一个机器上是非零内部null指针？</A></LI>
+  <P>
+
+  <LI><A href="aryptrequiv_cn.html">6.3 那么C语言的“指针和数组等价”是什么意思？</A></LI>
+  <LI><A href="aryptrparam_cn.html">6.4 如果它们如此不同，为什么数组和指针声明在作为函数形参时可互换？</A></LI>
+  <LI><A href="arraylval_cn.html">6.7 数组怎么是左值，如果你不能对它赋值？</A></LI>
+  <LI><A href="pass2dary_cn.html">6.8 当我传递一个二维数组到一个接受一个指针的指针的函数时，我的编译器出错了？</A></LI>
+  <LI><A href="dynmuldimary_cn.html">6.16 我如何动态分配一个多维数组？</A></LI>
+  <P>
+
+  <LI><A href="ptrvaralloc_cn.html">7.3c 一个指针变量分配多少内存？</A></LI>
+  <LI><A href="retaggr_cn.html">7.5a 我有一个需要返回一个字符串的函数，但是它返回到调用处时，返回的字符串是垃圾值。</A></LI>
+  <LI><A href="retaggr2_cn.html">7.5b 那么返回一个字符串或其它复合数据的正确方法是什么？</A></LI>
+  <LI><A href="cast_cn.html">7.7 为什么一些代码小心地转换malloc的返回值为被分配的指针类型？</A></LI>
+  <LI><A href="local_cn.html">7.22 当我调用malloc为一个函数内的局部指针分配内存，我必须显式释放它吗？</A></LI>
+  <LI><A href="freeb4exit_cn.html">7.24 我必须在程序退出前释放所有动态分配的内存吗？</A></LI>
+  <P>
+
+  <LI><A href="hfiles_cn.html">10.6 在.c文件和.h文件中分别可以有些什么？</A></LI>
+  <LI><A href="nestincl_cn.html">10.7 一个头文件可以包含另一个吗？</A></LI>
+  <P>
+
+  <LI><A href="constasconst_cn.html">11.8 我不理解为什么我不能将const值用于初始化或数组尺寸？</A></LI>
+  <LI><A href="constmismatch_cn.html">11.10 为什么我不能把一个char **传递给一个需要const char **的函数？</A></LI>
+  <P>
+
+  <LI><A href="scanfprobs_cn.html">12.20 为什么人人都说不要使用scanf()？我应该使用什么代替它？</A></LI>
+  <LI><A href="textvsbinary_cn.html">12.40 文本和二进制I/O的区别是什么？</A></LI>
+  <LI><A href="getsvsfgets_cn.html">12.23 为什么人人都说不要使用gets()？</A></LI>
+  <P>
+
+  <LI><A href="curtime_cn.html">13.12 我如何用一个C程序获取当前日期和时间？</A></LI>
+  <LI><A href="extlibs_cn.html">13.25 我总是看到库函数未定义错误，但我包含了所有正确的头文件？</A></LI>
+  <P>
+
+  <LI><A href="revtest_cn.html">17.4 为什么一些人写 if(0==x) 而不是 if(x==0) ？</A></LI>
+  <LI><A href="hungarian_cn.html">17.8 什么是“匈牙利符号”？值得这样做吗？</A></LI>
+  <P>
+
+  <LI><A href="books_cn.html">18.10 用于学习C的好书是哪一本？高级的书籍和参考呢？</A></LI>
+  <LI><A href="stdlibsrc_cn.html">18.13 我在哪里能找到C标准库的源代码？</A></LI>
+  <P>
+
+  <LI><A href="ftruncate_cn.html">19.13 如何不完全清除或重写，适当地截断一个文件？</A></LI>
+  <LI><A href="insdelrec_cn.html">19.14 我如何插入或删除一行，在文件（或记录）的中间？</A></LI>
+  <LI><A href="rawmemadr_cn.html">19.25 我如何访问某个地址上的内存（一个内存映射设备或图形内存）？我如何在C中查看或写入内存？</A></LI>
+  <P>
+
+  <LI><A href="intovf_cn.html">20.6b 我如何确定整型算术不溢出？</A></LI>
+  <LI><A href="endiantest_cn.html">20.9 我如何确定一个机器的字节顺序是大端还是小端？</A></LI>
+  <LI><A href="quintplus_cn.html">20.21b C不是一个伟大的语言吗，还是怎么的？其它你在哪里能写这样的东西a+++++b？</A></LI>
+  <LI><A href="hash_cn.html">20.29 何谓哈希?</A></LI>
+  <LI><A href="lvalue_cn.html">20.39b 左值和右值是什么意思？</A></LI>
+</UL>
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits. Original text <A href="http://www.c-faq.com/copyright.html">Copyright</A> by Steve Summit. 该中文翻译版权由译者保留，作为向C语言程序设计社区提供的服务，许可用于个人目的，允许拷贝备份。禁止未经书面许可进行出版、张贴、散播。)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com
+</I>

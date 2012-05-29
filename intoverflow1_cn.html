@@ -1,0 +1,67 @@
+<TITLE>
+3.14 为什么这个代码 int a = 1000, b = 1000; long int c = a * b; 不对？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+3.14 为什么这个代码不对？
+</H4>
+<P>
+
+<PRE>
+  int a = 1000, b = 1000;
+  long int c = a * b;
+</PRE>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+在C的整型提升规则下，乘法使用int型算术进行，并且结果在提升和赋值给左值long int之前，可能溢出或被截断。使用一个显式的类型转换于至少一个运算对象，以强制进行long算术：
+<P>
+
+<PRE>
+  long int c = (long int)a * b;
+</PRE>
+<P>
+
+或者可能
+<P>
+
+<PRE>
+  long int c = (long int)a * (long int)b;
+</PRE>
+<P>
+
+（两种形式相等）
+<P>
+
+注意表达式 (long int)(a * b) 不会得到想要的结果。一个这种形式的显式类型转换（即是应用于乘法运算结果），等同无论如何将在赋值给左值long int时发生的隐式类型转换，并且类似隐式转换，它发生的太晚了，在已经造成这种损害之后。
+<P>
+
+同时参见问答3.15。
+<P>
+
+参考：K&R1 Sec. 2.7 p. 41 
+<BR>
+K&R2 Sec. 2.7 p. 44 
+<BR>
+ISO Sec. 6.2.1.5 
+<BR>
+H&S Sec. 6.3.4 p. 176 
+<BR>
+CT&P Sec. 3.9 pp. 49-50 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/expr/intoverflow1.html
+</I>

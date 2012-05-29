@@ -1,0 +1,53 @@
+<TITLE>
+12.20 为什么人人都说不要使用scanf()？我应该使用什么代替它？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+12.20 为什么人人都说不要使用scanf()？我应该使用什么代替它？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+scanf有很多问题——参见问答12.17，12.18a和12.19，它的%s格式也有与gets()同样的问题（参见问答12.23）——很难保证接收缓冲不会溢出。（一个显式的字段宽度可能有用，像%20s；参见问答12.15。）
+<P>
+
+更普遍的是，scanf被设计用于相当结构化、格式化的输入（它的名字实际上来自“scan formatted”）。如果你加以留意，它会告诉你它是否成功或失败，但是它仅告诉你，它大概是在哪里失败，而根本没有说如何和为什么。你没有什么机会进行任何错误恢复。
+<P>
+
+然而交互式用户输入是最少有结构化输入的。一个设计良好的用户输入接口，在需要数字的时候，允许任何用户输入的可能性——不仅仅是字符或标点符号，而且字符个数也可以多于或少于期望，或者根本没有字符（例如只有回车键），或者太早的EOF，或任何输入。几乎不可能优雅处理所有这些使用scanf的潜在问题；读入整行更容易（使用fgets或类似），然后解析它们，使用sscanf或其它技巧。（像strtol、strtok或atoi等函数通常有用；参见问答12.16或13.6。） 如果你真的使用任何scanf变体，确保检查返回值以保证找到期望的输入项个数。如果你也使用%s，确保要防止缓冲区溢出。
+<P>
+
+顺便，注意对scanf的批评不必要是对fscanf和sscanf的控诉。scanf读取标准输入，它通常是一个交互式键盘，并因此少有约束，导致最多的问题。另一方面，当一个数据文件有一种已知的格式，它适合用fscanf读取。用sscanf解析字符串非常合适（返回值也被检查），因为它是如此容易重新获得控制，重新扫描，抛弃不匹配输入，等等。
+<P>
+
+补充链接：
+<P>
+
+<UL>
+  <li><a href="http://www.c-faq.com/stdio/gets_flush1.html">Chris Torek更长的解释</a>
+  <li><a href="http://www.c-faq.com/stdio/gets_flush2.html">Steve Summit更长的解释</a>
+</UL>
+
+<P>
+
+<P>
+
+参考：K&R2 Sec. 7.4 p. 159 
+<BR>
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/stdio/scanfprobs.html
+</I>

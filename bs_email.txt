@@ -1,0 +1,271 @@
+[Synthesis and not-inherit C++ facilities]
+
+
+
+
+     from  Bjarne Stroustrup <b...@research.att.com>    hide details  5/3/05  
+ reply-to  Bjarne Stroustrup <b...@research.att.com>   
+       to  lovecreatesbea...@gmail.com   
+     date  May 3, 2005 1:18 AM   
+  subject  Re: Predefined member functions and inheritance   
+mailed-by  research.att.com   
+
+>Delivered-To: b...@research.att.com
+>DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; s=beta; d=gmail.com;
+h=received:message-id:date:from:reply-to:to:subject:mime-version:content-type;
+b=WblxrpmNKduiKFWb6cRK2u8NoGxUdV2swwpV3xccHKAmmyOAkd3HzLFOOTk7bul2eoOJ6f99O/G81R
+e7Y8qj9Xsjn5/myYGTB/aNdjihaIqY1lBhOUNTvgumvQFyna+6YjULKJfCgvq4qHSkb4UTX4LLXbipZr
+N3wiLQXTZSMPg=
+>Date: Sat, 30 Apr 2005 15:49:14 +0800
+>From: lovecreatesbeauty <lovecreatesbea...@gmail.com>
+>To: b...@research.att.com
+>Subject: Predefined member functions and inheritance
+>Mime-Version: 1.0
+>X-Spam-Checker-Version: SpamAssassin 3.0.3 (2005-04-27) on
+mail-gray.research.att.com
+>X-Spam-Level:
+>X-Spam-Status: No, score=-1.5 required=4.0 tests=BAYES_00,HTML_00_10,
+HTML_MESSAGE,RCVD_BY_IP autolearn=no version=3.0.3
+
+>
+>Dr. Stroustrup,
+>
+>I'm a young C/C++ programmer from China. Now I'm working at an Indian
+>company at our China.
+>
+>Now I hava some question on C++ again, could you please answer them, when
+>you have time. Thank you.
+>
+>Predefined member functions and inheritance
+>
+>1. How many member functions will be predefined (provided by compilers
+>implicitly) and called by standard-compliant compilers for a class? Does
+>such a list be given in iso/iec 14882?
+>
+>2. Which member functions of a base class won't be inherited by derived
+>class?
+>
+>3. Do all the member functions of a base class predefined by
+>standard-compliant compilers won't be inherited by derived class? - i.e.,
+>does the pre-definition mean non-inheritable?
+
+"predefined function" is not a standard  C++ term
+
+By default, a class gets
+
+default construction
+copy construction
+assignment
+. (dot)
+, (comma)
+destruction
+
+assignment and constructors are not inherited.
+       - Bjarne
+
+Bjarne Stroustrup, http://www.research.att.com/~bs
+
+
+
+
+     from  Bjarne Stroustrup <b...@cs.tamu.edu>    hide details  11/20/06  
+       to  lovecreatesbeauty@gmai1.c0m
+     date  Nov 20, 2006 1:50 AM   
+  subject  Re: Synthesized & non-inherited class members   
+mailed-by  cs.tamu.edu   
+
+> Dear Dr. Stroustrup,
+>
+> Recently, I program some Oracle OCI/OCCI database application. I think
+> the Oracle OCCI is a good demonstration on using C++ and its class
+> features. It encapsulates functions and data supporting the operation
+> in a class very well. OCCI provides a better encapsulation than the
+> embedded SQL in its Pro*C and INFORMIX ESQL/C. I hated to program
+> database applications in embedded style like in Pro*C and ESQL/C.
+>
+> Dr. I still have the same questions:
+>
+> 1) Which / how many members will (have the chance to) be provided
+> automatically by a class in C++.
+
+There is a table on page 306 of the ARM, but I guess that's not a
+particularly useful piece of information for you. That table doesn't
+mention &, though it should have, nor ,, sizeof, inheriting, ::, or .
+which people sometimes mention.
+
+Sticking strictly to operators. Generated
+
+default ctor (unless there are explicitly defined constructors)
+copy ctor
+copy assignment
+destructor
+& (address of)
+, (comma)
+
+>
+> 2) Which / how many members will not be inherited from parent classes?
+
+Inherited. All but
+
+constructors
+destructor
+assignment
+
+>
+> I ever read Scott Meyers popular book Effective C++, in one print of
+> its second edition, he mentioned that two operator& will be provided
+> automatically for a class. He made an errata on this point and removed
+> operator& from that list. <url:
+> http://www.aristeia.com/BookErrata/ec++2e-errata_frames.html>. In the
+> errata, Mr. Meyers mentioned two more glossaries:
+> 1. "built-in address-of operator" and
+> 2. "global operator& function".
+>
+> Is there the third glossary:
+> 3. "class defined operator"?
+>
+> What do the built-in and global things do to a class? Can they be data
+> members or member functions? How do they affect the other members are
+> not built-in and global in a class?
+>
+> I didn't find the answer to my question even on your books, and am
+> eager to know the answer. ( 1) Which / how many members will (have the
+> chance to) be provided automatically by a class in C++.  2) Which /
+> how many members will not be inherited from parent classes? )
+>
+> Best regards to you.
+>
+> Jianhua Li
+> Shenzhen China, 13 Nov 2006
+
+
+
+
+     from  Bjarne Stroustrup <b...@cs.tamu.edu>    hide details  11/21/06  
+       to  lovecreatesbeauty@gmai1.c0m
+     date  Nov 21, 2006 3:42 AM   
+  subject  Re: Synthesized & non-inherited class members   
+mailed-by  cs.tamu.edu   
+
+> Dr. Stroustrup,
+>
+> Thank you for your reply.
+>
+> I am keeping ask stupid questions and am very sorry to waste your
+> time, do I :)
+> I ever thought that my last boring email will be blocked by your email
+> spam filter.
+>
+> I just come out with a table of predefined / generated members based
+> on your TC++PL, special ed.
+>
+> ---quoting TC++PL---
+> (sec 11.2):
+>        :: (scope resolution)
+>        .  (member selection)
+>        .* (member selection through pointer to member)
+>
+>        :? (ternary conditional expression operator)
+>        sizeof
+>        typeid
+>
+> (sec 11.2.2):
+>        operator= (assignment)
+>        operator, (address-of)
+>        operator& (sequencing)
+
+No & is not sequencing (that's &&); & is address of
+
+>
+> (sec 11.7):
+>        X();                    // default constructor: create objects
+>        X(const X&);            // copy constructor
+>        X& operator=(const X&); // copy assignment: cleanup and copy
+>        ~X();                   // destructor: cleanup
+> ---quoting TC++PL ends---
+>
+> I even make such a conclusion, (I may be wrong on some points).
+>
+> The members automatically provided for a class will be provided for
+> any class including parent classes, child classes. The child classes
+> have their own copies of these members and no need to inherit them
+> from their parent classes.
+
+Correct, but since , and & are not generated, a derived class will
+inherit tham.
+
+>
+> Your TC++PL book is not easy for a beginner.
+
+Correct; and I say so in the foreword.
+
+> I read Koenig's
+> Accelerated C++, Glassborow's You Can do it, C++ Primer 4th recently,
+> and your books also. I am keep learning programming.
+
+Best of luck.
+
+>
+> Regards.
+>
+> On 11/19/06, Bjarne Stroustrup <b...@cs.tamu.edu> wrote:
+>> > Dear Dr. Stroustrup,
+>> >
+>> > Recently, I program some Oracle OCI/OCCI database application. I think
+>> > the Oracle OCCI is a good demonstration on using C++ and its class
+>> > features. It encapsulates functions and data supporting the operation
+>> > in a class very well. OCCI provides a better encapsulation than the
+>> > embedded SQL in its Pro*C and INFORMIX ESQL/C. I hated to program
+>> > database applications in embedded style like in Pro*C and ESQL/C.
+>> >
+>> > Dr. I still have the same questions:
+>> >
+>> > 1) Which / how many members will (have the chance to) be provided
+>> > automatically by a class in C++.
+>> There is a table on page 306 of the ARM, but I guess that's not a
+>> particularly useful piece of information for you. That table doesn't
+>> mention &, though it should have, nor ,, sizeof, inheriting, ::, or .
+>> which people sometimes mention.
+>>
+>> Sticking strictly to operators. Generated
+>>
+>> default ctor (unless there are explicitly defined constructors)
+>> copy ctor
+>> copy assignment
+>> destructor
+>> & (address of)
+>> , (comma)
+>>
+>> >
+>> > 2) Which / how many members will not be inherited from parent classes?
+>> Inherited. All but
+>>
+>> constructors
+>> destructor
+>> assignment
+>> >
+>> > I ever read Scott Meyers popular book Effective C++, in one print of
+>> > its second edition, he mentioned that two operator& will be provided
+>> > automatically for a class. He made an errata on this point and removed
+>> > operator& from that list. <url:
+>> > http://www.aristeia.com/BookErrata/ec++2e-errata_frames.html>. In the
+>> > errata, Mr. Meyers mentioned two more glossaries:
+>> > 1. "built-in address-of operator" and
+>> > 2. "global operator& function".
+>> >
+>> > Is there the third glossary:
+>> > 3. "class defined operator"?
+>> >
+>> > What do the built-in and global things do to a class? Can they be data
+>> > members or member functions? How do they affect the other members are
+>> > not built-in and global in a class?
+>> >
+>> > I didn't find the answer to my question even on your books, and am
+>> > eager to know the answer. ( 1) Which / how many members will (have the
+>> > chance to) be provided automatically by a class in C++.  2) Which /
+>> > how many members will not be inherited from parent classes? )
+>> >
+>> > Best regards to you.
+>> >
+>> > Jianhua Li
+>> > Shenzhen China, 13 Nov 2006

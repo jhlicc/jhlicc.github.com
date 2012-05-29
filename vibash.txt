@@ -1,0 +1,42 @@
+Vi And Bash Settings 
+
+
+1.
+
+"~/.exrc
+set ts=2
+set sw=2
+set ai
+:set expandtab
+:filetype off
+
+"set nu
+"set sm
+"set cindent
+"set smartindent
+
+"for ..\Vim\_vimrc on Windows
+":syntax off
+"set guioptions-=m
+"set guioptions-=T
+"set guifont=courier:h10
+
+
+2.
+
+#~/.bashrc
+PS1='\$ '
+set -o vi
+stty erase ^H
+
+
+3.
+
+#~/.bash_profile
+. .bashrc
+
+
+4.
+
+#~/.hushlogin
+  #an empty file to suppress login messages

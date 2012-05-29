@@ -1,0 +1,81 @@
+TCC homepage http://bellard.org/tcc/
+
+The end of C-like scripting languages
+
+Scripting in C directly with TCC
+
+
+$ aptitude search tcc
+..
+i   tcc                             - the smallest ANSI C compiler
+..
+$
+
+$ pwd
+/home/jhl/tmp
+$ ls
+a.c
+$ cat a.c
+// #!/usr/local/bin/tcc -run
+#include <stdio.h>
+
+int main(void)
+{
+    printf("Hello World\n");
+    return 0;
+}
+$ tcc -run a.c
+Hello World
+$
+$ ls
+a.c
+$ tcc a.c
+$ ls
+a.c  a.out
+$ ./a.out
+Hello World
+$
+
+TCC might not show some warnings while GCC does. Invoke GCC with this automatic
+Makefile to detect the rest of warnings.
+
+$ cat Makefile
+ 
+# Visual Stupid Makefile 1628872598@qq.com
+# Layout: [include/]  src/
+# .c and Makefile in src, .h can be in include, no other directories.
+# Project related: CPPFLAGS
+# .cpp, CXX, CXXFLAGS for C++
+ 
+OUT      = main.out
+SRCS     = $(wildcard *.c)
+OBJS     = $(patsubst %.c,%.o,$(SRCS))
+CC       = gcc
+CXX      = g++
+CFLAGS   = -std=c99 -Wall -W
+CXXFLAGS = -std=c++0x -Wall -W
+CPPFLAGS = -I ../include
+LDFLAGS  =
+ 
+CFLAGS   += -g
+#CFLAGS  += -DNDEBUG
+CFLAGS   += -D_POSIX_SOURCE -D_BSD_SOURCE
+#LDFLAGS += -lpthread
+ 
+$(OUT): $(OBJS)
+        $(CC) $(LDFLAGS) $^ -o $@
+ 
+include $(SRCS:.c=.d)
+ 
+%.d: %.c
+        @set -e; rm -f $@; \
+        $(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+        sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+        rm -f $@.$$$$
+ 
+.PHONY: clean
+clean:
+        rm *.d *.d.* $(OBJS) $(OUT)
+ 
+$
+

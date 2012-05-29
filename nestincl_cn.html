@@ -1,0 +1,42 @@
+<TITLE>
+10.7 一个头文件可以包含另一个吗？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+10.7 一个头文件可以包含另一个吗？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+这是一个风格问题，因此有相当多的争辩。许多人相信“嵌套的包含文件”应该避免：声望卓著的Indian Hill风格指南（参见问答17.9）贬斥它们；它们令更加难于发现相关定义；它们导致多重定义错误，如果一个文件被重复包含；它们导致增加编译时间；它们令手工Makefile维护非常困难。另一方面，它们让头文件按照一种模块的方式使用变得可能（一个头文件能包含它自己需要的东西，而不是要求每个包含指令都如此）；一个像grep的工具（或一个tags文件）令易于搜索定义，不管它们在哪里；一个通常如下列代码行的技巧：
+<P>
+
+<PRE>
+  #ifndef HFILENAME_USED
+  #define HFILENAME_USED
+  ...header file contents...
+  #endif
+</PRE>
+<P>
+
+（在一个不同的括弧宏名被用于每个头文件的地方）令一个头文件“幂等”，所以它能安全地被多次包含；一个聪明的编译能避免消耗更多的时间，在已包含头文件的后期实例；并且自动Makefile维护工具（无论如何，事实上它在大型项目中是必要的；参见问答18.1）在嵌套包含文件中，更容易处理依赖关系生成。同时参见问答17.10。
+<P>
+
+参考：Rationale Sec. 4.1.2
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/cpp/nestincl.html
+</I>

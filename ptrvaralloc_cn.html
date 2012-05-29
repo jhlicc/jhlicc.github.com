@@ -1,0 +1,36 @@
+<TITLE>
+7.3c 一个指针变量分配多少内存？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+7.3c 一个指针变量分配多少内存？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+这是一个颇被误导的问题。当你声明一个指针变量，像在
+<P>
+
+<PRE>
+  char *p;
+</PRE>
+<P>
+
+你（或更准确地说，编译器）只分配了用以存放指针本身的内存；即是，在这种情况下你分配了sizeof(char *)字节内存。但是你没有分配指针所指向的内存。同时参见问答7.1和7.2。
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/malloc/ptrvaralloc.html
+</I>

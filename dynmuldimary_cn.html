@@ -1,0 +1,161 @@
+<TITLE>
+6.16 我如何动态分配一个多维数组？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+6.16 我如何动态分配一个多维数组？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+传统的方法是分配一个到指针的指针的数组，然后初始每个指针到一个动态分配的“行”。这里是一个两维数组的例子：
+<P>
+
+<PRE>
+  #include <stdlib.h>
+
+  int **array1 = malloc(nrows * sizeof(int *));
+  for(i = 0; i < nrows; i++)
+    array1[i] = malloc(ncolumns * sizeof(int));
+</PRE>
+<P>
+
+（在真实的代码中，当然要检查所有malloc的返回值。你也可以使用sizeof(*array1)和sizeof(**array1)代替sizeof(int *)和sizeof(int)。）
+<P>
+
+你可以让数组的内容保持连续，所付出的代价是以后再分配单独行更困难，使用一些显式指针算术：
+<P>
+
+<PRE>
+  int **array2 = malloc(nrows * sizeof(int *));
+  array2[0] = malloc(nrows * ncolumns * sizeof(int));
+  for(i = 1; i < nrows; i++)
+    array2[i] = array2[0] + i * ncolumns;
+</PRE>
+<P>
+
+在每一种情况（例如对array1和array2）中，动态数组的元素可以按正常的数组下标形式来访问：arrayx[i][j]（对0 <= i < nrows并且0 <= j < ncolumns）。这是一个array1和array2的布局示意图：
+<P>
+
+<PRE>
+          +--+        +--+--+--+--+--+
+  array1: |o-+--------+  |  |  |  |  |
+          +--+        +--+--+--+--+--+
+          |o-+-----+
+          +--+     |  +--+--+--+--+--+
+          |o-+--+  +--+  |  |  |  |  |
+          +--+  |     +--+--+--+--+--+
+                |
+                |     +--+--+--+--+--+
+                +-----+  |  |  |  |  |
+                      +--+--+--+--+--+
+
+          +--+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  array2: |o-+--------+  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+          +--+        +--+--+--+--+--++-+--+--+--+--++-+--+--+--+--+
+          |o-+------------------------+              |
+          +--+                                       |
+          |o-+---------------------------------------+
+          +--+
+</PRE>
+<P>
+
+如果上述图解中隐含的二次解引用，因为某些原因不可接受的话，你可以用一个动态分配的单个一维数组，来模拟一个二维数组：
+<P>
+
+<PRE>
+  int *array3 = malloc(nrows * ncolumns * sizeof(int));
+</PRE>
+<P>
+
+然而，现在你必须手工进行下标计算，访问第i,jth元素用这个表达式：
+<P>
+
+<PRE>
+  array3[i * ncolumns + j]
+</PRE>
+<P>
+
+并且这个数组并非一定要传递给一个要求多维数组的函数。（一个这样的宏
+<P>
+
+<PRE>
+  #define Arrayaccess(a, i, j) ((a)[(i) * ncolumns + (j)])
+</PRE>
+<P>
+
+可以隐藏明显的计算，但是调用它可能需要圆括号和逗号，这看起来不很像C传统的多维数组语法，并且这个宏也需要访问这些维度中至少一个。参见问答6.19。）
+<P>
+
+另一个选择是使用到数组的指针：
+<P>
+
+<PRE>
+  int (*array4)[NCOLUMNS] = malloc(nrows * sizeof(*array4));
+</PRE>
+<P>
+
+或者，甚至
+<P>
+
+<PRE>
+  int (*array5)[NROWS][NCOLUMNS] = malloc(sizeof(*array5));
+</PRE>
+<P>
+
+但是语法开始变得可怕（对array5访问是(*array5)[i][j] ），并且在运行时最多只能指定一个维度。
+<P>
+
+使用全部这些技巧，你当然应该需要记得，在不在需要时释放这些数组；在array1和array2的例子中，这需要几个步骤（参见问答7.23）：
+<P>
+
+<PRE>
+  for(i = 0; i < nrows; i++)
+    free((void *)array1[i]);
+  free((void *)array1);
+
+  free((void *)array2[0]);
+  free((void *)array2);
+</PRE>
+<P>
+
+你也不必要混合动态分配数组，和传统的静态数组（参见问答6.20，和6.18）。
+<P>
+
+最后，你能在C99中使用变长数组（variable-length array）。
+<P>
+
+所有这些技巧也能被扩展到三或更多维数组．这里是第一个技巧的一个三维版本（像这里展示的其它代码片断一样，在用于真正的程序之前，它也需要错误检查）：
+<P>
+
+<PRE>
+  int ***a3d = (int ***)malloc(xdim * sizeof(int **));
+  for(i = 0; i < xdim; i++) {
+    a3d[i] = (int **)malloc(ydim * sizeof(int *));
+    for(j = 0; j < ydim; j++)
+      a3d[i][j] = (int *)malloc(zdim * sizeof(int));
+  }
+</PRE>
+<P>
+
+同时参见问答20.2。
+<P>
+
+参考：C9X Sec. 6.5.5.2 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/aryptr/dynmuldimary.html
+</I>

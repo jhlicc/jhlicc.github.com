@@ -1,0 +1,133 @@
+Linux Kernel Programming basis 
+
+
+
+1.
+
+distribution: debian-40r4a (kernel: 2.6.18) from debian.org,
+kernel source: linux-2.6.26.3.tar.bz2 from kernel.org.
+
+
+2.
+
+place and extract the kernel source tree under user home directory,
+follow the ../linux-2.6.26.3/README file in the kernel package.
+
+$ cd ~
+$ bzip2 -dc linux-2.6.26.3.tar.bz2 | tar xvf -
+$ cd linux-2.6.26.3
+$ make clean mrproper
+$ cp /boot/config-$(uname -r) ./.config
+$ make menuconfig
+$ make
+$ su -c 'make install'
+$ su -c 'make modules_install'
+$ su -c 'update-initramfs -c -k 2.6.26.3'
+Password:
+update-initramfs: Generating /boot/initrd.img-2.6.26.3
+$
+
+
+3.
+
+add following five lines in /boot/grub/menu.lst:
+
+title           Debian GNU/Linux, kernel 2.6.26.3
+root            (hd0,0)
+kernel          /boot/vmlinuz-2.6.26.3 root=/dev/sda1 ro
+initrd          /boot/initrd.img-2.6.26.3
+savedefault
+
+
+4.
+
+$ cat hello.c
+
+#include <linux/init.h>
+#include <linux/module.h>
+MODULE_LICENSE("Dual BSD/GPL");
+
+static int hello_init(void)
+{
+       printk(KERN_ALERT "Hello, world\n");
+       return 0;
+}
+
+static void hello_exit(void)
+{
+       printk(KERN_ALERT "Goodbye, cruel world\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+
+
+$ cat Makefile
+
+# If KERNELRELEASE is defined, we've been invoked from the
+# kernel build system and can use its language.
+
+ifneq ($(KERNELRELEASE),)
+       obj-m := hello.o
+
+# Otherwise we were called directly from the command
+# line; invoke the kernel build system.
+else
+       KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+       PWD := $(shell pwd)
+default:
+       $(MAKE) -C $(KERNELDIR) M=$(PWD) modules
+endif
+
+
+$ make
+
+$ ls
+hello.c   hello.mod.c  hello.o   modules.order
+hello.ko  hello.mod.o  Makefile  Module.symvers
+
+$ su -c ' insmod ./hello.ko'
+Password:
+
+$ su -c ' rmmod ./hello.ko'
+Password:
+
+$
+
+
+--------------------------------------------------------------------------------
+Note:
+
+1. use the current kernel configuration as the basis for the new kernel 
+   configuration. Most debian based distributions have the kernel configuration
+   file in the /boot directory (eg: config-2.6.26-2-286). make a copy and place
+   it at the kerel source directory (eg: ~/linux-2.6.26.3), rename as .config . 
+   use the menuconfig to read and edit the new .config file, and just answer yes
+   to save the automatically made changes. also can turn on or off other proper
+   options in menuconfig.
+
+2. "make install" will copy files including kernel image "vmlinuz-2.6.26.3" to
+    /boot directory.
+
+3. "make modules_install" will copy modules to /lib/modules/2.6.26.3.
+
+4. troubleshoot: "SIOCSIFADDR: No such device" problem.
+
+    This may be caused by needed module, for example, on my machine PCNET32 is
+    not enabled by "make defconfig".
+
+    $ grep PCNET32 .config
+    # CONFIG_PCNET32 is not set
+    $
+
+    config CONFIG_PCNET32 to m (modular) or y (build-in) and rebuild the source.
+
+5. the printk messages print on the console window of the linux on VMware side,
+    they don't print on the putty window, the ssh client side.
+
+6. the kernel compilation and booting process go smoothly on VMware workstation 
+    version 6, but fail on version 5.
+
+
+ - jhlicc@gmai1.c0m 
+

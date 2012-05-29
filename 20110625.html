@@ -1,0 +1,23 @@
+<html><head> 
+<script src="ajax.js" type="text/javascript"></script> 
+<script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script> 
+</head><body> 
+<input type="button" value="ajax() demo!" id="input1" onclick='ajax("div1", "get", "20110625-2.html")' /> 
+<a href="ajax.js">ajax() source</a> 
+<br> 
+<input type="button" value="jQuery demo!" id="input2" /> 
+<div id="div1"></div> 
+<script> 
+$(document).ready(function(){ 
+
+$("#input2").click(function(event){ 
+	$.ajax({type: "get", url: "20110625-2.html", 
+		success: function(data, status, xhr){$("#div1").html(data);},
+		error: function(xhr, status, err){$("#div1").html(xhr.status + " " + xhr.statusText);}
+	}); 
+}); 
+
+}); 
+
+</script> 
+</body></html> 

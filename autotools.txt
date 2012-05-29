@@ -1,0 +1,21 @@
+                        +--- [autoscan]
+                        |
+                        v
+Makefile.am's       configure.ac (older configure.in)
+    |                   |
+    |          + - - - -+
+    |          |        |
+    v          |        v
+automake <- - -+    autoconf [autoreconf]
+    |                   |
+    v                   v
+Makefile.in's - - > configure
+                        |
+                        v
+                    Makefile's
+                        |
+                        v
+                    make (install, clean, uninstall ...)
+
+
+(based on text from `automake.pdf')

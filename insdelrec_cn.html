@@ -1,0 +1,51 @@
+<TITLE>
+19.14 我如何插入或删除一行，在文件（或记录）的中间？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+19.14 我如何插入或删除一行，在文件（或记录）的中间？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+一般没有办法这样做。通常的办法就是重写该文件。
+<P>
+
+如果你需要向一个现有文件中插入数据，可以尝试这些被选方案：
+<P>
+
+<ul>
+<li>
+重新整理数据文件，以让你能够把新数据附在末尾。
+<li>
+把数据放入一个记录文件。
+<li>
+在开始生成写入文件时，在其中留下一些空白空间（例如80个空格的一行，或者这样的字段 0000000000），以后用最终的数据覆盖它（参见问答12.30）。（这个技巧在二进制模式时最具可移植性；在某些系统上，重写一个文本可能会截断它）。
+<li>
+使用数据库代替平面文件。
+</ul>
+<P>
+
+你应该考虑把记录标记为“删除”，让读文件的代码忽略它们，而不是真的能去删除它们。（你可以运行一个子程序，去重写该文件，最后丢弃需要被删除的记录。或者，如果记录全是同样的长度，你可以用最后的记录覆盖需被删除的，然后截断该文件）
+<P>
+参加问答12.30和19.13。
+<P>
+
+补充链接：<a href="http://c-faq.com/osdep/insertf.20000216.html">更多阅读</a>
+<P>
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://c-faq.com/osdep/insdelrec.html
+</I>
+

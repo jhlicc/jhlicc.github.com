@@ -1,0 +1,128 @@
+$ cat a.c
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+int main(void)
+{
+        char dent[16] = {0};
+        const size_t MAX = 1000;
+        double nd = 0, nf = 0;
+        size_t i1, i2, i3, i4;
+        char *p1, *p2, *p3;
+        size_t n1, n2, n3;
+        mode_t m1 = 0777;
+        mode_t m2 = 0666;
+        int rt;
+        int errnum;
+        clock_t start, end;
+
+        start = clock();
+        for (i1 = 0; i1 != MAX; i1++){
+                snprintf(dent, sizeof dent, "%03d/", i1);
+                rt = mkdir(dent, m1);
+                errnum = errno;
+                nd++;
+                if (rt == -1){
+                        printf("mkdir: %s, directory: %s, cnt: %.f, file cnt: %.f\n", strerror(errnum), dent, nd, nf);
+                        return -1;
+                }
+                n1 = strlen(dent);
+                p1 = dent + n1;
+                for (i2 = 0; i2 != MAX; i2++){
+                        snprintf(p1, sizeof dent - n1, "%03d/", i2);
+                        rt = mkdir(dent, m1);
+                        errnum = errno;
+                        nd++;
+                        if (rt == -1){
+                                printf("mkdir: %s, directory: %s, cnt: %.f, file cnt: %.f\n", strerror(errnum), dent, nd, nf);
+                                return -1;
+                        }
+                        n2 = strlen(dent);
+                        p2 = dent + n2;
+                        for (i3 = 0; i3 != MAX; i3++){
+                                snprintf(p2, sizeof dent - n2, "%03d/", i3);
+                                rt = mkdir(dent, m1);
+                                errnum = errno;
+                                nd++;
+                                if (rt == -1){
+                                        printf("mkdir: %s, directory: %s, cnt: %.f, file cnt: %.f\n", strerror(errnum), dent, nd, nf);
+                                        return -1;
+                                }
+                                n3 = strlen(dent);
+                                p3 = dent + n3;
+                                for (i4 = 0; i4 != MAX; i4++){
+                                        snprintf(p3, sizeof dent - n3, "%03d", i4);
+                                        rt = creat(dent, m2);
+                                        errnum = errno;
+                                        close(rt);
+                                        nf++;
+                                        if (rt == -1){
+                                                printf("creat: %s, file: %s, cnt: %.f, directory cnt: %.f\n", strerror(errnum), dent, nf, nd);
+                                                return -1;
+                                        }
+                                }
+                        }
+                }
+        }
+        end = clock();
+        printf("Time Elapsed: %lu, file cnt: %.f, directory cnt: %.f\n", (unsigned long)(end - start) / CLOCKS_PER_SEC, nf, nd);
+        return 0;
+}
+
+$
+$ df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/sda1              19G  2.6G   16G  15% /
+tmpfs                 125M     0  125M   0% /lib/init/rw
+udev                  121M  160K  120M   1% /dev
+tmpfs                 125M     0  125M   0% /dev/shm
+$ df -iT
+Filesystem    Type    Inodes   IUsed   IFree IUse% Mounted on
+/dev/sda1     ext3   1256640   41395 1215245    4% /
+tmpfs        tmpfs     31843       5   31838    1% /lib/init/rw
+udev         tmpfs     30732     587   30145    2% /dev
+tmpfs        tmpfs     31843       1   31842    1% /dev/shm
+$ make
+gcc -std=c99 -Wall -W -I ../include  -c -o a.o a.c
+gcc  a.o -o main.out
+$ echo > a.txt
+$ ./main.out
+creat: No space left on device, file: 000/001/214/026, cnt: 1214027, directory cnt: 1218
+$ echo > b.txt
+-bash: b.txt: No space left on device
+$ df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/sda1              19G  2.7G   16G  15% /
+tmpfs                 125M     0  125M   0% /lib/init/rw
+udev                  121M  160K  120M   1% /dev
+tmpfs                 125M     0  125M   0% /dev/shm
+$ df -iT
+Filesystem    Type    Inodes   IUsed   IFree IUse% Mounted on
+/dev/sda1     ext3   1256640 1256640       0  100% /
+tmpfs        tmpfs     31843       5   31838    1% /lib/init/rw
+udev         tmpfs     30732     587   30145    2% /dev
+tmpfs        tmpfs     31843       1   31842    1% /dev/shm
+$ ls
+000  a.c  a.d  a.o  a.txt  main.out  Makefile
+$ rm -fr 000
+$ echo > b.txt
+$ df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/sda1              19G  2.6G   16G  15% /
+tmpfs                 125M     0  125M   0% /lib/init/rw
+udev                  121M  160K  120M   1% /dev
+tmpfs                 125M     0  125M   0% /dev/shm
+$ df -iT
+Filesystem    Type    Inodes   IUsed   IFree IUse% Mounted on
+/dev/sda1     ext3   1256640   41397 1215243    4% /
+tmpfs        tmpfs     31843       5   31838    1% /lib/init/rw
+udev         tmpfs     30732     587   30145    2% /dev
+tmpfs        tmpfs     31843       1   31842    1% /dev/shm
+$

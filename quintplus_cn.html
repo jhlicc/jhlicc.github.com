@@ -1,0 +1,45 @@
+<TITLE>
+20.21b C不是一个伟大的语言吗，还是怎么的？其它你在哪里能写这样的东西a+++++b？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+20.21b C不是一个伟大的语言吗，还是怎么的？其它你在哪里能写这样的东西a+++++b？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+嗯，在C中你也不能让它有意义。句法分析规则是，在一个直接的从左到右的扫描的每一点，最长的可能标记被确定，而不考虑是否结果标记序列是否有意义。问题中的代码片断因此被解释为
+<P>
+
+<PRE>
+  a ++ ++ + b
+</PRE>
+<P>
+
+并且不能被解析为一个正确的表达式。
+<P>
+
+参考：K&R1 Sec. A2 p. 179 
+<BR>
+K&R2 Sec. A2.1 p. 192 
+<BR>
+ISO Sec. 6.1 
+<BR>
+H&S Sec. 2.3 pp. 19-20 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/misc/quintplus.html
+</I>

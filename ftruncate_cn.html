@@ -1,0 +1,30 @@
+<TITLE>
+19.13 如何不完全清除或重写，适当地截断一个文件？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+19.13 如何不完全清除或重写，适当地截断一个文件？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+BSD系统提供了ftruncate，另外一些提供了chsize，还有一些可能提供了一个（可能未被归档）fcntl选项F_FREESP。在MS-DOS下，你有时可以用write(fd, "", 0)。然而没有可移植的方法去这样做，也没有办法删除开始处或中间的块。参见问答19.14。
+
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://c-faq.com/osdep/ftruncate.html
+</I>
+

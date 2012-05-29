@@ -1,0 +1,60 @@
+<TITLE>
+1.32 这些初始化 char a[] = "string literal"; char *p  = "string literal"; 的区别是什么？我的程序崩溃了如果我尝试赋一个新值给p[i]。
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+1.32 这些初始化的区别是什么？
+</H4>
+<P>
+
+<PRE>
+  char a[] = "string literal";
+  char *p  = "string literal";
+</PRE>
+<P>
+  
+我的程序崩溃了如果我尝试赋一个新值给p[i]。
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+一个字符串字面值（C源代码中一个双引号串的正式术语）能通过两种稍微有些不同的方式被使用：
+<P>
+
+<OL>
+  <LI>用于一个字符数组的初始化，像在char a[]的声明中，它指定数组中字符的初始值（并且必要时包括它的尺寸）。
+<P>
+
+  <LI>在其它任何地方，它变成一个无名的静态字符数组，这个无名数组可能被存储在只读内存，因此它不能被修改。在一个表达式上下文中，通常（参见问答第六部分）这个数组立刻被转换为一个指针，所以第二个声明初始化p，指向无名数组的第一个元素。
+</OL>
+<P>
+
+一些编译器有一个控制是否字符串字面值可写的开关选项（用于编译旧代码），一些可能有导致字符串字面值被正式作为const char数组的选项（为了更好的发现错误）。
+<P>
+
+同时参见问答1.31、6.1、6.2、6.8和11.8b。
+<P>
+
+参考：K&R2 Sec. 5.5 p. 104 
+<BR>
+ISO Sec. 6.1.4, Sec. 6.5.7 
+<BR>
+Rationale Sec. 3.1.4 
+<BR>
+H&S Sec. 2.7.4 pp. 31-2 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/decl/strlitinit.html
+</I>

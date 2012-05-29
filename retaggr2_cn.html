@@ -1,0 +1,74 @@
+<TITLE>
+7.5b 那么返回一个字符串或其它复合数据的正确方法是什么？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+7.5b 那么返回一个字符串或其它复合数据的正确方法是什么？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+返回的指针应该指向一个静态分配的缓冲（像在问题7.5a中的回答），或者由调用者传入的缓冲，或者由malloc获得的俄内存，但不是一个局部（自动）数组。
+<P>
+
+例如，由调用者传递用于存放结果的空间：
+<P>
+
+<PRE>
+  char *itoa(int n, char *retbuf)
+  {
+    sprintf(retbuf, "%d", n);
+    return retbuf;
+  }
+
+  ...
+
+  char str[20];
+  itoa(123, str);
+</PRE>
+<P>
+
+使用malloc：
+<P>
+
+<PRE>
+  #include <stdlib.h>
+
+  char *itoa(int n)
+  {
+    char *retbuf = malloc(20);
+    if(retbuf != NULL)
+      sprintf(retbuf, "%d", n);
+    return retbuf;
+  }
+
+  ...
+
+  char *str = itoa(123);
+</PRE>
+<P>
+
+（在后一个例子中，调用者必须记得在不再使用时，释放返回的指针指向的内存。）
+<P>
+
+同时参见问答20.1。
+<P>
+
+补充链接：<a href="http://www.c-faq.com/malloc/sd2.html" rel=subdocument>更多阅读</a>。
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/malloc/retaggr2.html
+</I>

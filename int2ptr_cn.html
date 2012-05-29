@@ -1,0 +1,48 @@
+<TITLE>
+4.14 整数和指针间如何转换？我们可以临时把一个整数塞进一个指针，或相反吗？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+4.14 整数和指针间如何转换？我们可以临时把一个整数塞进一个指针，或相反吗？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+曾几何时，一个指针保证可以转换为一个整数（尽管不知道是要求int还是long类型），一个整数也能转换为一个指针，当一个指针转换为一个（足够大的）整数并且再转换回来，指针保持不会改变，这些转换（及任何关联）确定"不会令了解机器地址结构的人吃惊"。换句话说，曾存在整数/指针间转换的先例和对其的支持，但是它们总是依赖于机器，因此不可移植。对它们总是要求显式类型转换（如果你把它们漏掉了，早期编译器几乎不发出抱怨）。
+<P>
+
+ANSI/ISO C标准，为了保证C广泛可实现，削弱了那些早期的保证。指针到整数和整数到指针的转换由实现定义（参见问答11.33），不再保证指针能被转换为整数，再转换回来后没有改变。
+<P>
+
+强制转换指针为整数，或整数为指针，从来都不是良好的编程习惯。当你需要一个通用的位置存放两种数据之一，一个union是更好的主意。
+<P>
+
+同时参见问答4.15、4.18和19.25。
+<P>
+
+参考：K&R1 Sec. A14.4 p. 210
+<BR>
+K&R2 Sec. A6.6 p. 199
+<BR>
+ISO Sec. 6.3.4
+<BR>
+Rationale Sec. 3.3.4
+<BR>
+H&S Sec. 6.2.3 p. 170, Sec. 6.2.7 pp. 171-2
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/ptrs/int2ptr.html
+</I>

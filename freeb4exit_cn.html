@@ -1,0 +1,40 @@
+<TITLE>
+7.24 我必须在程序退出前释放所有动态分配的内存吗？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+7.24 我必须在程序退出前释放所有动态分配的内存吗？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+你不必要。一个真正的操作系统在一个程序退出时，肯定会收回程序占用的所有内存和其它资源；系统不会让内存的完整性依赖任意程序的古怪行为（严格地讲，把内存收回操作系统甚至不是free的工作；参见问答7.25）。然而，一些个人计算机不会可靠收回内存，除非程序在退出之前调用free函数进行释放，所有这些从ANSI/ISO C标准能得出的结论就是，这是一个“实现质量问题”。
+<P>
+
+另一方面，C库的free函数几乎不将内存返回到操作系统（参见问答7.25），所以无论如何，调用free不能保证一个退出的程序的内存返回到系统。
+<P>
+
+无论如何，显式调用free释放所有内存，是一个很好的习惯——例如，一旦程序被重写来多次执行主要任务（或许在一个图形用户界面）。另一方面，有许多程序（像解释器）一直到退出时，不知道它们在使用什么内存（比如那些内存要被释放），既然所有内存都将在退出时被释放，让程序显式释放它占用的所有内存，是不必要，可能代价昂贵，和容易出错的演习。
+<P>
+
+补充链接：<a href="http://www.c-faq.com/malloc/freeb4exit2.html">更进一步的解释</a>。
+<P>
+
+参考：ISO Sec. 7.10.3.2
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/malloc/freeb4exit.html
+</I>

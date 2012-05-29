@@ -1,0 +1,44 @@
+<TITLE>
+1.30 我能假定未显式初始化的变量和数组有什么初始值？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+1.30 我能假定未显式初始化的变量和数组有什么初始值？如果全局变量初始为0，这对null指针和浮点数零合适吗？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+具有static持续期（即是，那些在函数体外定义声明，及那些用static存储类定义声明的变量）的未初始变量，保证初始化是0，就像程序员这样写`= 0’或`= {0}’。因此这类变量隐式初始化为null指针（正确类型的）如果它们是指针，初始化0.0如果它们是浮点数。
+<P>
+
+具有自动持续期的变量（例如，没有static修饰的本地变量）含有初始垃圾值，除非被显式初始化（这些垃圾值不可预期）。如果他们具有初始化表达式，他们在函数每次被调用时初始化。
+<P>
+
+这些规则不适用于数组和结构（它们有一个术语“集合变量”）；数组和结构也是能被初始化的变量。当一个自动数组或结构具有一个部分初始化器时，剩余元素被初始化为0，就像静态变量一样地。（K&R2早期印次不正确的描述，部分初始的静态集合变量被垃圾值填充）。同时参见问答1.31。
+<P>
+
+最后，malloc和realloc动态分配的内存大致包含垃圾，必须由主调程序适当地初始化。calloc获得的内存是全0位表示，但这对指针或浮点数值却非必要有用。参见问答7.31。
+<P>
+
+参考：K&R Sec 4.9 pp.82-4
+<BR>
+K&R Sec 4.9 pp.85-6
+<BR>
+ISO Sec 6.5.7, Sec 7.10.3.1, Sec 7.10.5.3
+<BR>
+H&S Sec. 4.2.8 pp. 72-3, Sec. 4.6 pp. 92-3, Sec. 4.6.2 pp. 94-5, Sec. 4.6.3 p. 96, Sec. 16.1 p. 386
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://c-faq.com/decl/initval.html
+</I>

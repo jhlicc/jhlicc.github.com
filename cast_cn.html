@@ -1,0 +1,46 @@
+<TITLE>
+7.7 为什么一些代码小心地转换malloc的返回值为被分配的指针类型？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+7.7 为什么一些代码小心地转换malloc的返回值为被分配的指针类型？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+在ANSI/ISO标准C引入void*通用指针类型之前，这些转换典型地被用来，在不兼容指针类型间赋值时消除警告（可能促使类型转换）。
+<P>
+
+在ANSI/ISO标准C下，这些转换不再需要。它们现在被不鼓励使用，也是有争议的；参见问答7.7b。而且，良好定义的，低风险的隐式转换（比如那些C一直在整数和浮点数类型间进行的）会被考虑作为一个特性。
+<P>
+
+另一方面，一些程序员喜欢显式进行每一个转换，以记录他们已经考虑过每一种情况，并且已正确决定了将发生什么事情（参见问答17.5）。同样，在C中这些转换因为某种原因，典型地是为了与C++兼容，在那里对void*的显式转换是被要求。
+<P>
+
+（顺便提及，K&R2在6.5和7.8.5节建议说，对这些转换的需要是太过热心了。）
+<P>
+
+在某种程度上，你是否使用这类转换是一种风格问题；参见问答第17节。
+<P>
+
+补充链接：<a href="http://www.c-faq.com/malloc/sd3.html" rel=subdocument>Mark Brader的进一步解释</a>。
+<P>
+
+参考：H&S Sec. 16.1 pp. 386-7 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/malloc/cast.html
+</I>

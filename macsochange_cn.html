@@ -1,0 +1,28 @@
+<TITLE>
+5.10 万一NULL的值改变，使用它不是更好吗（而不是0），或者在一个机器上是非零内部null指针？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+5.10 万一NULL的值改变，使用它不是更好吗（而不是0），或者在一个机器上是非零内部null指针？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+不。（使用NULL可能更好，但不是这个原因。） 尽管符号常量经常用于代替数字，因为数字可能改变，这不是NULL代替0的原因。再说，语言保证源代码中0（在指针上下文中）生成null指针。NULL仅被用作格式上的惯例。参见问答5.5和9.4。
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/null/macsochange.html
+</I>

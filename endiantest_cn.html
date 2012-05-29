@@ -1,0 +1,60 @@
+<TITLE>
+20.9 我如何确定一个机器的字节顺序是大端还是小端？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+20.9 我如何确定一个机器的字节顺序是大端还是小端？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+通常的技巧是使用一个指针：
+<P>
+
+<PRE>
+  int x = 1;
+  if(*(char *)&x == 1)
+    printf("little-endian\n");
+  else  printf("big-endian\n");
+</PRE>
+<P>
+
+或者一个union：
+<P>
+
+<PRE>
+  union {
+    int i;
+    char c[sizeof(int)];
+  } x;
+  x.i = 1;
+  if(x.c[0] == 1)
+    printf("little-endian\n");
+  else  printf("big-endian\n");
+</PRE>
+<P>
+
+（注意在简单的大端和小端外还有其它字节顺序的可能。）
+<P>
+
+同时参见问答10.16和20.9b。
+<P>
+
+参考：H&S Sec. 6.1.2 pp. 163-4 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/misc/endiantest.html
+</I>

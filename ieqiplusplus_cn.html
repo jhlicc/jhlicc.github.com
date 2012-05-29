@@ -1,0 +1,32 @@
+<TITLE>
+3.3 我看到这样的代码 int i = 3; i = i++; 在有些编译器上i是3，有些是4。哪个正确？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+3.3 我看到这样的代码在有些编译器上i是3，有些是4。哪个正确？
+</H4>
+<PRE>
+  int i = 3;
+  i = i++; 
+</PRE>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+没有正确的答案；这个表达式是未定义的。参见问答3.1、3.8、3.9和11.33。（也要注意i++和++i两者都不与i+1一样。如果你想增加i的值，使用i=i+1、i+=1或++i，而不是一些组合。同时参见问答3.12b。）
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/expr/ieqiplusplus.html
+</I>

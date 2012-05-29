@@ -1,0 +1,69 @@
+<TITLE>
+20.29 何谓哈希？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+20.29 何谓哈希？
+</H4>
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+哈希（hashing）是把字符串和整数关联起来的过程，通常在一个相对小的范围内。一个“哈希函数”把一个字符串（或者一些其它数据结构）映射到一个受限的数字（哈希值），它可以被容易用于一个数组索引，或者进行重复比较。（显然，从一个潜在巨大的字符串集，到一个小的整数集的映射，将不会是唯一的。任何使用哈希的算法因此必须处理这种“冲突”的可能。）
+<P>
+
+许多哈希函数和相关的算法已经被开发出来；一个完整的讨论超出了这个列表的范围。一个非常简单的字符串哈希函数只是简单地加总所有字符值：
+<P>
+
+<PRE>
+unsigned hash(char *str)
+{
+  unsigned int h = 0;
+  while(*str != '\0')
+    h += *str++;
+  return h % NBUCKETS;
+}
+</PRE>
+<P>
+
+一个稍微好些的哈希函数是
+<P>
+
+<PRE>
+unsigned hash(char *str)
+{
+  unsigned int h = 0;
+  while(*str != '\0')
+    h = (256 * h + *str++) % NBUCKETS;
+  return h;
+}
+</PRE>
+<P>
+
+它真的把输入串当作一个大的二进制数（8 * strlen(str) 位长，假定字符是8位），并且计算那个数对NBUCKETS取模，使用Horner规则。（这里在其它事情中，重要的是NBUCKETS是素数。为了去除字符是8位的假设，可以使用UCHAR_MAX+1代替256；“最大的二进制数”将是CHAR_BIT * strlen(str)位长。UCHAR_MAX和CHAR_BIT定义在<limits.h>。）
+<P>
+
+当预先知道字符串集合，这有可能设计一个“完美”的哈希函数，它保证没有冲突，密集哈希。
+<P>
+
+参考：K&R2 Sec. 6.6
+<BR>
+Knuth Sec. 6.4 pp. 506-549 Volume 3
+<BR>
+Sedgewick Sec. 16 pp. 231-244
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/misc/hash.html
+</I>

@@ -1,0 +1,27 @@
+Useful Unix commands
+
+1. Find commands
+
+$ find /home/jhl -name "a.c"
+$ find /home/jhl -name "a.c" -exec grep -l "main" {} \;
+$ find . -name "cyberspace.*" | xargs ls -l
+-rw-rw-r--. 1 lij lij 107827 Jul 10 03:30 ./cyberspace.tar.bz2
+-rw-rw-r--. 1 lij lij 107858 Jul  9 10:48 ./cyberspace.tar.bz2.orig
+$ find ./ -name "cyberspace.*" | xargs rm
+
+
+2. Find files in current directory excluding sub-directories
+
+$ find /home/jhl -name "*.txt" -maxdepth 1
+$ p='/home/jhl'; d='/*'; \
+  find "$p" -path "$p$d" -prune -name "*" -type f
+$ p='/home/jhl'; d='/*/*'; \
+  find "$p" -name "*.c" -type f \( -path "$p$d" -prune -o -print \)
+$ p='/home/jhl'; d='/*/*'; \
+  find "$p" -name "*.h" -type f ! -path "$p$d"
+
+
+3. Find and replace
+
+$ find . -type f -exec sed -i 's/catch/repl/g' {} \;
+$ find . -name "*.c" -exec grep -l hello {} \; -exec rm {} \;

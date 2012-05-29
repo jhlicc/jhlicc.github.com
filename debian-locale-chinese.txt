@@ -1,0 +1,91 @@
+Debian Chinese Locale Howto
+
+
+1.
+Choose Chinese (ÖÐÎÄ) language to proceed with the installation.
+
+Do choose Chinese at this time. You can still read menu in English in desktop environment, and command line feedback in English on PuTTY ssh client.
+
+2.
+Add en_US.UTF-8, but keep None as the default for the next question.
+$ su -c 'dpkg-reconfigure locales'
+
+3.
+To make sure you see command line feedback in English when you ssh with PuTTY. Add this line in ~/.bashrc:
+LANGUAGE=en_US.UTF-8
+
+4.
+Choose English at the GNOME desktop login window for the English menu etc.
+
+(5. TODO: Haven't tried it with VNC yet)
+
+
+--------------------------------------------------------------------------------
+Demo:
+
+$ ssh 192.168.0.150
+tom@192.168.0.150's password:
+$ su
+ÃÜÂë£º
+su£º¼ø¶¨¹ÊÕÏ
+$ echo $LANG
+en_US.UTF-8
+$ locale -a
+C
+en_US.utf8
+POSIX
+zh_CN.utf8
+$ locale
+LANG=en_US.UTF-8
+LANGUAGE=zh_CN:zh
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+LC_ALL=
+$
+$ vi ~/.bashrc
+$ grep LANGUAGE ~/.bashrc
+LANGUAGE=en_US.UTF-8
+$
+$ exit
+logout
+Connection to 192.168.0.150 closed.
+$
+$ ssh 192.168.0.150
+tom@192.168.0.150's password:
+$ su
+Password:
+su: Authentication failure
+$ echo $LANG
+en_US.UTF-8
+$ locale -a
+C
+en_US.utf8
+POSIX
+zh_CN.utf8
+$ locale
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+LC_ALL=
+$

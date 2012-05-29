@@ -1,0 +1,36 @@
+<TITLE>
+1.31b 这样初始化 char *p = malloc(10); 有什么错？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+1.31b 这样初始化有什么错？
+</H4>
+<P>
+
+<PRE>
+  char *p = malloc(10); 
+</PRE>
+<P>
+
+我的编译器报错说“无效的初始化”，或其它的。
+<P>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+这是一个静态或非局部变量声明吗？函数调用只允许用于初始化自动变量（即是，对非静态、局部变量）。
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/decl/fcninit.html
+</I>

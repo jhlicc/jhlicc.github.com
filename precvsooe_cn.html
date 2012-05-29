@@ -1,0 +1,56 @@
+<TITLE>
+3.4 我能使用明确的括号强制我想要的求值顺序，并控制副作用吗？假使我不能，是优先级决定了它吗？
+</TITLE>
+
+<H4>
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>Q:</B></FONT>
+3.4 我能使用明确的括号强制我想要的求值顺序，并控制副作用吗？假使我不能，是优先级决定了它吗？
+</H4>
+
+<HR>
+<P>
+
+<FONT FACE=Helvetica SIZE=8 COLOR=blue><B>A:</B></FONT>
+大致而言不是这样的。
+<P>
+
+运算符优先级和显式括号仅强加于一个表达式的一部分的求值顺序。在这个表达式中
+<pre>
+    f() + g() * h()
+</pre>
+
+尽管我们知道乘法先于加法进行，但并未提及这三个函数中的哪一个会最先调用。换言之，优先级仅部分地规定求值顺序，“部分地”显然未涵盖运算对象求值。
+<P>
+
+括号告诉编译器哪些运算对象匹配哪些运算符；他们并不强制编译器对括号内的所有内容首先求值。为上述表达式添加显式的括号使之为
+<pre>
+    f() + (g() * h())
+</pre>
+
+在函数调用次序并不产生任何不同。相似地，给2.3节中的表达式添加括号使其为
+<pre>
+    (i++) * (i++)		/* WRONG */
+</pre>
+
+并不能产生任何意义（因为++的优先级比*高）；不管有没有它们表达式的行为仍是未定义的。
+<P>
+
+当你需要保证子表达式的求值顺序时，你可以使用明确的临时变量和单独的语句。
+<P>
+
+参考：K&R1 Sec. 2.12 p. 49, Sec. A.7 p. 185 
+<BR>
+K&R2 Sec. 2.12 pp. 52-3, Sec. A.7 p. 200 
+<P>
+
+<HR>
+<P>
+
+<I>
+(This Chinese translation isn't confirmed by the author, and it isn't for profits.)
+<P>
+
+Translator : jhlicc@gmai1.c0m
+<BR>
+Origin : http://www.c-faq.com/expr/precvsooe.html
+</I>
